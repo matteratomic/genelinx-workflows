@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
@@ -36,4 +36,10 @@ const FormSuccessScreen = () => {
   );
 };
 
-export default FormSuccessScreen;
+const Page = () => {
+  <Suspense>
+    <FormSuccessScreen />
+  </Suspense>
+}
+
+export default Page;
