@@ -37,7 +37,7 @@ export default function Page(props: {}) {
         
 `}}></p>
         <div className="mx-auto flex items-center justify-center space-x-6">
-          <Link href="https://gene-linx.com/wp-content/uploads/2024/10/Draft_Participant_Information_Leaflet-v4-23.08.24-Clean.pdf"><div className="cursor-pointer bg-primary flex items-center justify-center p-3 rounded-md text-white w-48 font-medium">Information Leaflet</div></Link>
+          <div className="cursor-pointer bg-primary flex items-center justify-center p-3 rounded-md text-white w-48 font-medium">Information Leaflet</div>
           <Link href="/otp"><div className="cursor-pointer bg-transparent border-2 border-primary text-primary flex items-center justify-center p-3 rounded-md w-48 font-medium">Enroll Now</div></Link>
         </div>
       </div>
