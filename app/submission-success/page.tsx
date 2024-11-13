@@ -37,7 +37,7 @@ const FormSuccessScreen = () => {
 };
 
 const Page = () => {
-  <Suspense>
+  return <Suspense>
     <FormSuccessScreen />
   </Suspense>
 }
