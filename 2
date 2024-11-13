@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,8 +5,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { PlayCircle, BookOpen, CheckCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
-import { Label } from '../ui/label';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const CourseSection = ({ title, description, topics, videoTitle, src }) => (
   <Card className="mb-6">
@@ -31,12 +28,17 @@ const CourseSection = ({ title, description, topics, videoTitle, src }) => (
 
         <div className="mt-4">
           <div className="relative rounded-lg overflow-hidden bg-neutral-100 aspect-video">
-            {/* <div className="absolute inset-0 flex items-center justify-center"> */}
-            {/*   <Button variant="outline" className="gap-2"> */}
-            {/*     <PlayCircle className="h-5 w-5" /> */}
-            {/*     Watch {videoTitle} */}
-            {/*   </Button> */}
-            {/* </div> */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Button variant="outline" className="gap-2">
+                <PlayCircle className="h-5 w-5" />
+                Watch {videoTitle}
+              </Button>
+            </div>
+            {/* <img */}
+            {/*   src="https://www.youtube.com/watch?v=lMSIwbAJf1I" */}
+            {/*   alt={`${title} video thumbnail`} */}
+            {/*   className="w-full h-full object-cover opacity-50" */}
+            {/* /> */}
             <iframe
               className="w-full h-full"
               src={src} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -50,10 +52,9 @@ const CourseSection = ({ title, description, topics, videoTitle, src }) => (
 
 const progressMap = {
   fundamentals: 0,
-  hboc: 20,
-  lynch: 40,
-  considerations: 60,
-  proceed: 100
+  hboc: 33,
+  lynch: 66,
+  considerations: 100
 };
 
 const GeneticsCourse = () => {
@@ -92,7 +93,6 @@ const GeneticsCourse = () => {
               <TabsTrigger value="hboc">HBOC Syndrome</TabsTrigger>
               <TabsTrigger value="lynch">Lynch Syndrome</TabsTrigger>
               <TabsTrigger value="considerations">Considerations</TabsTrigger>
-              <TabsTrigger value="proceed">Proceed to Testing</TabsTrigger>
             </TabsList>
           </ScrollArea>
 
@@ -154,28 +154,6 @@ const GeneticsCourse = () => {
               videoTitle="Making Informed Decisions"
               src="https://www.youtube.com/embed/W8iiLTi6MiY?si=UYDss8Yv1w9dbaRg"
             />
-          </TabsContent>
-
-          <TabsContent value="proceed">
-            <div className="space-y-2 pl-4">
-              <Label className="text-primary text-lg">After reviewing the information provided would you like to proceed to testing?</Label>
-              <div className="pt-2" />
-              <RadioGroup
-              // onValueChange={(value) => setValue('appointmentType', value)}
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="yes" id="yes" />
-                  <Label htmlFor="male">Yes</Label>
-                </div>
-                <div className="pt-3" />
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="no" id="no" />
-                  <Label htmlFor="female">No</Label>
-                </div>
-              </RadioGroup>
-              {/* <div className="text-sm italic pt-2 text-neutral-600">We ask this question as the risks for some conditions depend on this information </div> */}
-            </div>
-            <Button className="mt-8" size="lg">Submit</Button>
           </TabsContent>
         </Tabs>
       </div>
