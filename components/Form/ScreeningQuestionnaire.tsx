@@ -162,13 +162,14 @@ export const ScreeningQuestionnaire = ({
         {/* <div className="text-sm italic pt-2 text-neutral-600">We ask this question as the risks for some conditions depend on this information </div> */}
         {Questions3.map((q, i) => {
           const length = Questions3[0]?.headers?.length
-          return <div className="flex"><Question
+          return <div
             key={i}
-            title={q.q}
-            length={length}
-            headers={q?.headers}
-            showHeader={i === 0}
-          /></div>
+            className="flex"><Question
+              title={q.q}
+              length={length}
+              headers={q?.headers}
+              showHeader={i === 0}
+            /></div>
         })}
       </div>
     </CardContent>

@@ -8,6 +8,29 @@ import { PlayCircle, BookOpen, CheckCircle } from 'lucide-react';
 import { Progress } from '../ui/progress';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Separator } from '../ui/separator';
+
+
+const Conflicts = [
+  {
+    q: "Do you feel sure about the best choice for you?",
+    headers: ['Yes', 'No',]
+  },
+  { q: "Do you know the benefits and risks of each option?" },
+  { q: "Are you clear about which benefits and risks matter most to you?" },
+  { q: "Do you have enough support and advice to make a choice?" },
+]
+
+
+const AIM = [
+  {
+    q: "This alternate digital education pathway offered (in place of the appointment) met my approval",
+    headers: ["Completely disagree", "Disagree", "Neither agree or disagree", "Agree", "Completely agree"]
+  },
+  { q: "The alternate digital education pathway is appealing to me" },
+  { q: "I liked the alternate digital education pathway" },
+  { q: "I welcome the alternate digital education pathway" },
+]
 
 const CourseSection = ({ title, description, topics, videoTitle, src }) => (
   <Card className="mb-6">
@@ -53,11 +76,43 @@ const progressMap = {
   hboc: 20,
   lynch: 40,
   considerations: 60,
-  proceed: 100
+  proceed: 100,
+  conflict: 100,
+  aim: 100,
 };
 
 const GeneticsCourse = () => {
   const [activeTab, setActiveTab] = useState("fundamentals");
+
+  const Question = ({
+    title,
+    length,
+    headers,
+    showHeader
+  }) => {
+    return <>
+      <Label className="text-primary text-base leading-5 w-1/4">{title}</Label>
+      <div className="flex flex-col ml-16 flex-1">
+        {showHeader ?
+          <div className="flex space-x-2 -translate-y-16 justify-center">
+            {headers?.map((h, i) => {
+              return <h3 key={i} className="text-sm text-center w-24">{h}</h3>
+            })}
+          </div>
+          : null}
+        <RadioGroup className={`${showHeader ? '-translate-y-8' : ''} justify-center flex flex-row space-x-20`}
+        // onValueChange={(value) => setValue('appointmentType', value)}
+        >
+          {Array(length).fill(0).map((_, i) => {
+            return <div key={i} className="flex items-center space-x-2">
+              <RadioGroupItem value={`${Math.random() * 100}`} id={`${Math.random() * 100}`} />
+            </div>
+          })}
+        </RadioGroup>
+      </div>
+    </>
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -93,6 +148,8 @@ const GeneticsCourse = () => {
               <TabsTrigger value="lynch">Lynch Syndrome</TabsTrigger>
               <TabsTrigger value="considerations">Considerations</TabsTrigger>
               <TabsTrigger value="proceed">Proceed to Testing</TabsTrigger>
+              <TabsTrigger value="conflict">Decision Conflict Scale</TabsTrigger>
+              <TabsTrigger value="aim">Acceptability Intervention Measure</TabsTrigger>
             </TabsList>
           </ScrollArea>
 
@@ -175,6 +232,55 @@ const GeneticsCourse = () => {
               </RadioGroup>
               {/* <div className="text-sm italic pt-2 text-neutral-600">We ask this question as the risks for some conditions depend on this information </div> */}
             </div>
+            <Button className="mt-8" size="lg">Submit</Button>
+          </TabsContent>
+
+          <TabsContent className="pl-4" value="conflict">
+            <div className="w-full h-16"></div>
+            <h1 className="font-medium text-sm">Please answer the questions below</h1>
+            <div className="w-full h-4"></div>
+            <Separator />
+            <div className="w-full h-4"></div>
+
+            <div className="pt-16 flex flex-col flex-wrap space-y-3 justify-center">
+              {/* <div className="text-sm italic pt-2 text-neutral-600">We ask this question as the risks for some conditions depend on this information </div> */}
+              {Conflicts.map((q, i) => {
+                const length = Conflicts[0]?.headers?.length
+                return <div
+                  key={i}
+                  className="flex"><Question
+                    title={q.q}
+                    length={length}
+                    headers={q?.headers}
+                    showHeader={i === 0}
+                  /></div>
+              })}
+            </div>
+
+            <Button className="mt-8" size="lg">Submit</Button>
+          </TabsContent>
+
+          <TabsContent className="pl-4" value="aim">
+            <div className="w-full h-16"></div>
+            <h1 className="font-medium text-sm">Please answer the questions below</h1>
+            <div className="w-full h-4"></div>
+            <Separator />
+            <div className="w-full h-4"></div>
+
+            <div className="pt-16 flex flex-col flex-wrap space-y-3 justify-center">
+              {AIM.map((q, i) => {
+                const length = AIM[0]?.headers?.length
+                return <div
+                  key={i}
+                  className="flex"><Question
+                    title={q.q}
+                    length={length}
+                    headers={q?.headers}
+                    showHeader={i === 0}
+                  /></div>
+              })}
+            </div>
+
             <Button className="mt-8" size="lg">Submit</Button>
           </TabsContent>
         </Tabs>
