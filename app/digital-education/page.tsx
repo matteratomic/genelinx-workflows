@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { CalendarIcon, CreditCard, User, ChevronRight, Clock, Info, Compass, ClipboardList } from 'lucide-react'
 import { format } from 'date-fns'
@@ -36,6 +36,7 @@ import { PatientDetails } from '@/components/Form/PatientDetails'
 import { MedicalHistory } from '@/components/Form/MedicalHistory'
 import { FamilyDetails } from '@/components/Form/FamilyDetails'
 import { ScreeningQuestionnaire } from '@/components/Form/ScreeningQuestionnaire'
+import { toast } from 'sonner'
 
 type FormData = {
   name: string
@@ -102,11 +103,36 @@ const ethnicity = [
 const relations = [
   'Self', 'Partner', 'Mother', 'Father', 'Brother', 'Sister', 'Half-sister', 'Half-brother', 'Son', 'Daughter', 'Grandmother', 'Grandfather', 'Uncle', 'Aunt', 'Grandson', 'Granddaughter', 'Niece', 'Nephew', 'Cousin (Male)', 'Cousin (Female)', 'Other']
 
+function formatDate(date) {
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  };
+
+  return date.toLocaleString('en-US', options);
+}
+
 export default function AppointmentForm() {
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>()
   const [selectedItems, setSelectedItems] = useState(["recents", "home"])
+
+  useEffect(() => {
+    const currentDate = new Date();
+    toast("Consent form was signed successfully", {
+      description: formatDate(currentDate),
+      action: {
+        label: "Close",
+        onClick: () => console.log("Close"),
+      },
+    })
+  }, [])
 
   const handleCheckboxChange = (id) => {
     setSelectedItems((prev) =>
@@ -326,8 +352,8 @@ These terms and conditions outline the rules and regulations for the use of Gene
                 />
                 <div className="pt-4 flex flex-row items-start space-x-3 space-y-0">
                   <Checkbox
-                    // checked={selectedItems.includes(item.id)}
-                    // onCheckedChange={() => handleCheckboxChange(item.id)}
+                  // checked={selectedItems.includes(item.id)}
+                  // onCheckedChange={() => handleCheckboxChange(item.id)}
                   />
                   <Label className="text-sm font-normal">
                     I accept the Terms and Conditions

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google"
 import "./globals.css";
 import { Card } from "@/components/ui/card";
+import { Toaster } from "@/components/ui/sonner";
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -23,6 +24,7 @@ export default function RootLayout({
           <img className="w-40" src="https://gene-linx.com/wp-content/uploads/2023/02/Logo-files2-01-1.svg" />
         </Card>
         {children}
+        <Toaster />
       </body>
     </html>
   );

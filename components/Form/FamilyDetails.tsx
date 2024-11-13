@@ -135,9 +135,9 @@ export const FamilyDetails = ({
 
 
 
-      <div className="w-full h-3"></div>
-      <h1 className="font-medium text-sm">Aunts, Uncles and Cousins</h1>
-      <Separator />
+      {/* <div className="w-full h-3"></div> */}
+      {/* <h1 className="font-medium text-sm">Aunts, Uncles and Cousins</h1> */}
+      {/* <Separator /> */}
 
 
       {/* <div className="w-full h-3"></div> */}
