@@ -37,6 +37,7 @@ import { MedicalHistory } from '@/components/Form/MedicalHistory'
 import { FamilyDetails } from '@/components/Form/FamilyDetails'
 import { ScreeningQuestionnaire } from '@/components/Form/ScreeningQuestionnaire'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 type FormData = {
   name: string
@@ -122,6 +123,7 @@ export default function AppointmentForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormData>()
   const [selectedItems, setSelectedItems] = useState(["recents", "home"])
+  const router = useRouter()
 
   useEffect(() => {
     const currentDate = new Date();
@@ -145,10 +147,11 @@ export default function AppointmentForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true)
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 4000))
     console.log(data)
     setIsSubmitting(false)
-    alert('Appointment booked successfully!')
+    router.push('/course-section')
+    // alert('Appointment booked successfully!')
   }
 
   const watchDate = watch('date')
@@ -393,7 +396,7 @@ These terms and conditions outline the rules and regulations for the use of Gene
               onClick={() => { }}>
               Save
             </Button>}
-            {step < 7 ? (
+            {step < 6 ? (
               <Button size="lg" type="button" onClick={() => {
                 window.scrollTo({ behavior: 'smooth', top: 0 })
                 setStep(step + 1)
@@ -402,7 +405,7 @@ These terms and conditions outline the rules and regulations for the use of Gene
               </Button>
             ) : (
               <Button size="lg" type="submit" disabled={isSubmitting}>
-                Next
+                Finish
                 {/* {isSubmitting ? 'Booking...' : 'Book Appointment'} */}
               </Button>
             )}

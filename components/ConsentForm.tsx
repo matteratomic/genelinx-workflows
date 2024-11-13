@@ -1,8 +1,67 @@
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Signature from './Signature';
+
+const StudyHeader = () => {
+  const studyInfo = [
+    {
+      label: "Principal investigator's name:",
+      value: "Rosie O Shea"
+    },
+    {
+      label: "Principal investigator's title:",
+      value: "Principal Genetic Counsellor, Cancer Genetic Service and Assistant Professor, Trinity College Dublin"
+    },
+    {
+      label: "Telephone number of principal investigator:",
+      value: "+353 1 4103759"
+    },
+    {
+      label: "Consultant co-investigator's name:",
+      value: "Professor Karen Cadoo"
+    },
+    {
+      label: "Consultant co-investigator's title:",
+      value: "Consultant Oncologist and Cancer Geneticist, Clinical Lead of Cancer Genetic Service"
+    },
+    {
+      label: "Data Controller's/joint Controller's Identity:",
+      value: [
+        "St James Hospital",
+        "Dublin, Ireland"
+      ]
+    }
+  ];
+
+  return (
+    <Card className="w-full max-w-4xl border-2">
+      <CardHeader className="p-0">
+        <CardTitle className="text-center py-4 text-xl border-b-2">
+          Access to Cascade Genetic Testing (AGCT) Study Consent Form
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 space-y-6">
+        <img src="/logos.png" />
+        {studyInfo.map((item, index) => (
+          <div key={index} className="grid grid-cols-[300px_1fr] gap-4">
+            <div className="font-medium">{item.label}</div>
+            <div>
+              {Array.isArray(item.value) ? (
+                item.value.map((line, i) => (
+                  <div key={i}>{line}</div>
+                ))
+              ) : (
+                item.value
+              )}
+            </div>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  );
+};
 
 const ConsentForm = () => {
   const generalQuestions = [
@@ -26,6 +85,8 @@ const ConsentForm = () => {
       {/* <div className="text-center py-4 text-xl font-bold border-b-2"> */}
       {/*   ACGT Study */}
       {/* </div> */}
+
+      <StudyHeader />
       <CardContent className="p-0">
         {/* General Section */}
         <div className="border-b-2">

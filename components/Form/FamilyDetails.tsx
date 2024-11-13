@@ -88,7 +88,7 @@ export const FamilyDetails = ({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-primary">Is your maternal mother still living?</Label>
+        <Label className="text-primary">Is your maternal grandmother still living?</Label>
         <RadioGroup onValueChange={(value) => setValue('appointmentType', value)}>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="he/him" id="he/him" />

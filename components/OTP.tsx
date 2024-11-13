@@ -183,9 +183,9 @@ export default function SimulatedOTPConfirmation() {
       </div >
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-center text-xl font-bold pb-4 border-b-2">
-            ACGT Study
-          </DialogTitle>
+          {/* <DialogTitle className="text-center text-xl font-bold pb-4 border-b-2"> */}
+          {/*   Access to Cascade Genetic Testing study consent form */}
+          {/* </DialogTitle> */}
         </DialogHeader>
         <ScrollArea className="max-h-[70vh] rounded-md">
           <ConsentForm />
