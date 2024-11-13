@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Separator } from '../ui/separator';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import ConsentForm from '../ConsentForm';
+import MedicalForm from './MedicalForm';
 
 
 const Conflicts = [
@@ -23,7 +24,6 @@ const Conflicts = [
   { q: "Are you clear about which benefits and risks matter most to you?" },
   { q: "Do you have enough support and advice to make a choice?" },
 ]
-
 
 const AIM = [
   {
@@ -79,6 +79,8 @@ const progressMap = {
   hboc: 20,
   lynch: 40,
   considerations: 60,
+  review: 60,
+  questions: 60,
   proceed: 80,
   conflict: 90,
   aim: 100,
@@ -166,6 +168,8 @@ const GeneticsCourse = () => {
                 <TabsTrigger value="hboc">HBOC Syndrome</TabsTrigger>
                 <TabsTrigger value="lynch">Lynch Syndrome</TabsTrigger>
                 <TabsTrigger value="considerations">Considerations</TabsTrigger>
+                <TabsTrigger value="review">Information Review</TabsTrigger>
+                <TabsTrigger value="questions">Questions</TabsTrigger>
                 <TabsTrigger value="proceed">Proceed to Testing</TabsTrigger>
                 {proceedTesting === "Yes" && hasSubmit ? <>
                   <TabsTrigger value="conflict">Decision Conflict Scale</TabsTrigger>
@@ -232,6 +236,171 @@ const GeneticsCourse = () => {
                 videoTitle="Making Informed Decisions"
                 src="https://www.youtube.com/embed/W8iiLTi6MiY?si=UYDss8Yv1w9dbaRg"
               />
+            </TabsContent>
+
+            <TabsContent value="review">
+              <p>Let us review the information we have covered</p>
+              <br />
+              <p>Now that we've covered the key information about cancer genetics and testing, here are a few questions to help you remember the most important pieces of information.</p>
+              <br />
+              <p>This isn't a test – it's an opportunity to review the information and ensure everything is clear to you to help you make the right decision for you.</p>
+              <br />
+              <p> Before we begin:</p>
+              <ul className="pl-8 list-disc">
+                <li>Feel free to refer back to the information in the module if you need to.</li>
+                <li>Take your time with each question. There's no rush.</li>
+                <li>After each question, the right information is shown to help you check your understanding.</li>
+              </ul>
+
+              {/* <CourseSection */}
+              {/*   title="Considerations for Genetic Testing" */}
+              {/*   description="Important factors to consider before pursuing genetic testing." */}
+              {/*   topics={[ */}
+              {/*     "Psychological impact", */}
+              {/*     "Privacy and discrimination", */}
+              {/*     "Insurance considerations", */}
+              {/*     "Family communication" */}
+              {/*   ]} */}
+              {/*   videoTitle="Making Informed Decisions" */}
+              {/*   src="https://www.youtube.com/embed/W8iiLTi6MiY?si=UYDss8Yv1w9dbaRg" */}
+              {/* /> */}
+            </TabsContent>
+
+            <TabsContent className="pl-4" value="questions">
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  Knowing about inherited risk (passed down within a family) can affect choices about cancer treatments (for examples, medications or surgery).
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="w-full h-4"></div>
+              <Separator />
+              <div className="w-full h-4"></div>
+
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  People with an inherited risk for cancer (and their at-risk relatives) are more likely to develop more than one type of cancer
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="w-full h-4"></div>
+              <Separator />
+              <div className="w-full h-4"></div>
+
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  A person with inherited risk for cancer will definitely get cancer one day.
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="w-full h-4"></div>
+              <Separator />
+              <div className="w-full h-4"></div>
+
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  If inherited risk for cancer is found, there is nothing a person can do to change his/her cancer risk
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="w-full h-4"></div>
+              <Separator />
+              <div className="w-full h-4"></div>
+
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  The lifetime chance of getting cancer depends on which altered cancer gene is inherited.
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="w-full h-4"></div>
+              <Separator />
+              <div className="w-full h-4"></div>
+
+              <div className="space-y-2">
+                <Label className="text-primary text-base">
+                  People with an inherited risk for cancer may get cancer at a younger age than people with average risk.
+                </Label>
+                <RadioGroup
+                  className="flex space-x-3 pt-3"
+                // onValueChange={(value) => setValue('appointmentType', value)}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="agree" id="agree" />
+                    <Label htmlFor="male">Agree</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="disagree" id="disagree" />
+                    <Label htmlFor="female">Disagree</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
             </TabsContent>
 
             <TabsContent value="proceed">
@@ -340,7 +509,8 @@ const GeneticsCourse = () => {
 
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <ScrollArea className="max-h-[70vh] rounded-md">
-          <ConsentForm />
+          {/* <ConsentForm second/> */}
+          <MedicalForm />
         </ScrollArea>
         <div className="flex justify-end space-x-4">
           <Button onClick={() => setDialogOpen(false)} variant="outline" type="button">Cancel</Button>
