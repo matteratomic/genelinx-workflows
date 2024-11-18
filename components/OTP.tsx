@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, Lock, ArrowRight, CheckCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import {useSearchParams} from 'next/navigation'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { ScrollArea } from './ui/scroll-area'
@@ -19,6 +20,8 @@ export default function SimulatedOTPConfirmation() {
   const [message, setMessage] = useState({ type: '', content: '' })
   const [generatedOTP, setGeneratedOTP] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
+  const searchParams = useSearchParams()
+  const isBooking = searchParams.get('booking')
 
   const simulateSendOTP = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -192,8 +195,7 @@ export default function SimulatedOTPConfirmation() {
         </ScrollArea>
         <div className="flex justify-end space-x-4">
           <Button onClick={() => setDialogOpen(false)} variant="outline" type="button">Cancel</Button>
-
-          <Link href="/digital-education">
+          <Link href={isBooking ? "/booking": "/digital-education"}>
             <Button
               onClick={() => setDialogOpen(false)}
               type="submit">Submit</Button>

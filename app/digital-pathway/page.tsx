@@ -11,7 +11,7 @@ export default function Page(props: {}) {
           <p className="text-xl">
             You are being invited to take part in the Access to Cascade Genetic Testing (ACGT) research study to be carried out at St. James’s Hospital in partnership with Trinity College Dublin by Assistant Professor Rosie O Shea, Principal Genetic Counsellor and Professor Karen Cadoo.
           </p>
-          <Link href="/otp"><div className="cursor-pointer bg-primary flex items-center justify-center p-3 rounded-md text-white w-48 font-medium">Enroll Now</div></Link>
+          <Link href="/otp?booking=true"><div className="cursor-pointer bg-primary flex items-center justify-center p-3 rounded-md text-white w-48 font-medium">Enroll Now</div></Link>
         </div>
         <div className="flex-1">
           <img src="https://gene-linx.com/wp-content/uploads/2024/06/Image-195.png" />

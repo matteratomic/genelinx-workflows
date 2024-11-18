@@ -64,7 +64,8 @@ export const FamilyDetails = ({
         <Label className="text-primary" htmlFor="name">How old is he currently?</Label>
         <Input
           className="w-1/3"
-          id="name" {...register('name', { required: 'Name is required' })} />
+          // id="name" {...register('name', { required: 'Name is required' })} 
+        />
         {/* {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>} */}
       </div>
 
@@ -72,7 +73,8 @@ export const FamilyDetails = ({
         <Label className="text-primary" htmlFor="name">Age of Death</Label>
         <Input
           className="w-1/3"
-          id="name" {...register('name', { required: 'Name is required' })} />
+          // id="name" {...register('name', { required: 'Name is required' })} 
+        />
         {/* {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>} */}
       </div>
 
@@ -110,7 +112,8 @@ export const FamilyDetails = ({
         <Label className="text-primary" htmlFor="name">How old is she currently?</Label>
         <Input
           className="w-1/3"
-          id="name" {...register('name', { required: 'Name is required' })} />
+          // id="name" {...register('name', { required: 'Name is required' })} 
+        />
         {/* {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>} */}
       </div>
 
@@ -118,7 +121,8 @@ export const FamilyDetails = ({
         <Label className="text-primary" htmlFor="name">Age of Death</Label>
         <Input
           className="w-1/3"
-          id="name" {...register('name', { required: 'Name is required' })} />
+          // id="name" {...register('name', { required: 'Name is required' })} 
+        />
         {/* {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>} */}
       </div>
 

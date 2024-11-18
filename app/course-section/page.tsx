@@ -1,5 +1,6 @@
+import {Suspense} from 'react'
 import CourseSection from "@/components/Form/CourseSection";
 
 export default function Page() {
-  return <CourseSection />
+  return <Suspense><CourseSection /></Suspense>
 }

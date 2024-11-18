@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter } from 'next/navigation'
+import { useRouter,useSearchParams } from 'next/navigation'
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { PlayCircle, BookOpen, CheckCircle } from 'lucide-react';
@@ -92,9 +92,18 @@ const GeneticsCourse = () => {
   const [hasSubmit, setHasSubmit] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const route = useRouter()
+  const searchParams = useSearchParams()
+  const isBooking = searchParams.get('booking') === 'true'
 
   const proceed = () => {
     setHasSubmit(true)
+
+    if(isBooking){
+    return proceedTesting === 'No'?
+      route.push('/submission-success?proceed=false')
+      : route.push('submission-success?proceed=true')
+    }
+
     if (proceedTesting === "Yes") {
       setActiveTab('conflict')
     } else {
@@ -171,10 +180,10 @@ const GeneticsCourse = () => {
                 <TabsTrigger value="review">Information Review</TabsTrigger>
                 <TabsTrigger value="questions">Questions</TabsTrigger>
                 <TabsTrigger value="proceed">Proceed to Testing</TabsTrigger>
-                {proceedTesting === "Yes" && hasSubmit ? <>
+                {!isBooking && proceedTesting === "Yes" && hasSubmit ? <>
                   <TabsTrigger value="conflict">Decision Conflict Scale</TabsTrigger>
                 </> : null}
-                {hasSubmit ? <TabsTrigger value="aim">Acceptability Intervention Measure</TabsTrigger> : null}
+                {!isBooking && hasSubmit ? <TabsTrigger value="aim">Acceptability Intervention Measure</TabsTrigger> : null}
               </TabsList>
             </ScrollArea>
 
@@ -264,6 +273,9 @@ const GeneticsCourse = () => {
               {/*   videoTitle="Making Informed Decisions" */}
               {/*   src="https://www.youtube.com/embed/W8iiLTi6MiY?si=UYDss8Yv1w9dbaRg" */}
               {/* /> */}
+              <Button
+                onClick={()=>setActiveTab('questions')}
+                type="submit">Submit</Button>
             </TabsContent>
 
             <TabsContent className="pl-4" value="questions">

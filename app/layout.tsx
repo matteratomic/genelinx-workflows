@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} h-screen antialiased`} >
-        <Card className="flex items-center px-8 w-full rounded-none h-16">
+        <Card className="flex items-center px-8 w-full rounded-none h-16 z-50 relative">
           <img className="w-40" src="https://gene-linx.com/wp-content/uploads/2023/02/Logo-files2-01-1.svg" />
         </Card>
         {children}
