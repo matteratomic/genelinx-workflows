@@ -81,14 +81,14 @@ const FAQAccordion = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex gap-4 justify-center">
-        <button className="px-6 py-2 border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition-colors">
-          Find more answers here
-        </button>
-        <button className="px-6 py-2 border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition-colors">
-          Contact us
-        </button>
-      </div>
+      {/* <div className="mt-8 flex gap-4 justify-center"> */}
+      {/*   <button className="px-6 py-2 border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition-colors"> */}
+      {/*     Find more answers here */}
+      {/*   </button> */}
+      {/*   <button className="px-6 py-2 border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition-colors"> */}
+      {/*     Contact us */}
+      {/*   </button> */}
+      {/* </div> */}
     </div>
   );
 };
@@ -96,12 +96,12 @@ const FAQAccordion = () => {
 const ConsultationBooking = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-teal-900 mb-4">Book an initial consultation</h1>
+      <h1 className="text-3xl font-bold text-primary mb-4">Book an initial consultation</h1>
 
       <p className="mb-8 text-gray-700">
         Understand your risks, if genetic testing is right for you and which test might help you.
         To learn more about your journey with GeneLinx,
-        <a href="#" className="text-teal-600 hover:text-teal-700"> click here</a>
+        <a href="#" className="text-primary hover:text-teal-700"> click here</a>
       </p>
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -116,7 +116,7 @@ const ConsultationBooking = () => {
           </div>
           <CardContent className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-teal-900">Cancer</h2>
+              <h2 className="text-xl font-semibold text-primary">Cancer</h2>
               <span className="text-gray-600">€249</span>
             </div>
             <ul className="text-sm text-primary grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -138,9 +138,9 @@ const ConsultationBooking = () => {
               </li>
             </ul>
             <div className="flex justify-between items-center">
-              <button className="text-teal-600 hover:text-teal-700">Read more</button>
+              <button className="text-primary hover:text-teal-700">Read more</button>
               <Link href="/otp?booking=true">
-              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Book</button>
+              <button className="bg-primary text-white px-6 py-2 rounded hover:bg-teal-900">Book Now</button>
               </Link>
             </div>
           </CardContent>
@@ -157,7 +157,7 @@ const ConsultationBooking = () => {
           </div>
           <CardContent className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-teal-900">Reproductive</h2>
+              <h2 className="text-xl font-semibold text-primary">Reproductive</h2>
               <span className="text-gray-600">€249</span>
             </div>
             <ul className="text-sm text-primary grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -198,7 +198,9 @@ I have a family history of disease and want to know the risks to my future pregn
             </ul>
             <div className="flex justify-between items-center">
               <button className="text-teal-600 hover:text-teal-700">Read more</button>
-              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Book</button>
+              <Link href="/otp?booking=true">
+              <button className="bg-primary text-white px-6 py-2 rounded hover:bg-teal-900">Book Now</button>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -253,7 +255,9 @@ I have results from a genetic test and want to discuss my results
             </ul>
             <div className="flex justify-between items-center">
               <button className="text-teal-600 hover:text-teal-700">Read more</button>
-              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Book</button>
+              <Link href="/otp?booking=true">
+              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Book Now</button>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -308,7 +312,9 @@ I want to discuss my previous test results (not cancer or proactive)
             </ul>
             <div className="flex justify-between items-center">
               <button className="text-teal-600 hover:text-teal-700">Read more</button>
-              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Contact us</button>
+              <Link href="/otp?booking=true">
+              <button className="bg-teal-800 text-white px-6 py-2 rounded hover:bg-teal-900">Book Now</button>
+              </Link>
             </div>
           </CardContent>
         </Card>
