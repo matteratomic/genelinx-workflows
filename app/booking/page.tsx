@@ -32,7 +32,7 @@ export default function Page(){
 
 const ConsultationItem = () => {
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-neutral-50 cursor-pointer">
+    <div className="flex items-center justify-between p-4 rounded-lg shrink-0 bg-neutral-50 cursor-pointer">
       {/* Left section with icon and title */}
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-xl font-semibold text-gray-600">
@@ -59,7 +59,7 @@ const ConsultationItem = () => {
       className="cursor-pointer mx-auto w-2/3 rounded-md border border-neutral-200 p-8">
       <div className={`w-full flex items-center justify-between`}>
       <div className="flex items-center space-x-3">
-        <div className="flex items-center justify-center bg-[#0D9488] rounded-full w-12 h-12">
+        <div className="flex items-center justify-center bg-[#0D9488] rounded-full shrink-0 w-12 h-12">
           <Icon className="text-white w-5 h-5"/>
         </div>
         <div className="flex flex-col">
@@ -116,7 +116,7 @@ return `${new Date(`${new Date().getMonth()+1} ${date} ${new Date().getFullYear(
 return <>
    {loading? 
     <div className="flex items-center justify-center fixed bg-black/50 inset-0 z-10">
-      <div className="w-24 h-24 border-8 border-white rounded-full border-b-primary animate-spin"/>
+      <div className="w-24 h-24 border-8 border-white rounded-full shrink-0 border-b-primary animate-spin"/>
     </div>
    : null} 
     <div className="h-full space-y-6 pt-8">

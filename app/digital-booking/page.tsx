@@ -396,12 +396,12 @@ These terms and conditions outline the rules and regulations for the use of Gene
               onClick={() => { }}>
               Save
             </Button>}
-            {step < 2 ? (
+            {step < 3 ? (
               <Button size="lg" type="button" onClick={() => {
                 window.scrollTo({ behavior: 'smooth', top: 0 })
                 setStep(step + 1)
               }}>
-                {step === 1 ? "Next" : "Next"}
+                {step === 1 ? "Next" : "Finish"}
               </Button>
             ) : (
               <Button size="lg" type="submit" disabled={isSubmitting}>
