@@ -500,3 +500,14 @@ These terms and conditions outline the rules and regulations for the use of Gene
 
 {/*            </CardContent> */ }
 
+
+
+  // const onSubmit = async (data: FormData) => {
+  //   setIsSubmitting(true)
+  //   // Simulate API call
+  //   await new Promise(resolve => setTimeout(resolve, 4000))
+  //   console.log(data)
+  //   router.push('/course-section?booking=true')
+  //   setIsSubmitting(false)
+  //   // alert('Appointment booked successfully!')
+  // }

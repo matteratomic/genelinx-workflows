@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mail, Lock, ArrowRight, CheckCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {useSearchParams} from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { ScrollArea } from './ui/scroll-area'
@@ -163,13 +163,19 @@ export default function SimulatedOTPConfirmation() {
                         <CheckCircle className="w-5 h-5 ml-2" />
                       </Button>
                       :
-                      <DialogTrigger asChild>
+                      !isBooking ? <DialogTrigger asChild>
                         <Button
-                          // type="submit"
                           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105">
                           Continue
                         </Button>
-                      </DialogTrigger>
+                      </DialogTrigger> :
+                        <Link href="/booking">
+                          <Button
+                            onClick={() => setDialogOpen(false)}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105">
+                            Continue
+                          </Button>
+                        </Link>
                     }
                   </motion.form>
                 )}
@@ -177,25 +183,14 @@ export default function SimulatedOTPConfirmation() {
             </div>
           </div>
         </motion.div >
-        {/* <Link href="/digital-education"><Button */}
-        {/*   type="submit" */}
-        {/*   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105"> */}
-        {/*   Continue */}
-        {/* </Button> */}
-        {/* </Link> */}
       </div >
       <DialogContent className="max-w-4xl max-h-[90vh]">
-        <DialogHeader>
-          {/* <DialogTitle className="text-center text-xl font-bold pb-4 border-b-2"> */}
-          {/*   Access to Cascade Genetic Testing study consent form */}
-          {/* </DialogTitle> */}
-        </DialogHeader>
         <ScrollArea className="max-h-[70vh] rounded-md">
           <ConsentForm />
         </ScrollArea>
         <div className="flex justify-end space-x-4">
           <Button onClick={() => setDialogOpen(false)} variant="outline" type="button">Cancel</Button>
-          <Link href={isBooking ? "/booking": "/digital-education"}>
+          <Link href={isBooking ? "/booking" : "/digital-education"}>
             <Button
               onClick={() => setDialogOpen(false)}
               type="submit">Submit</Button>

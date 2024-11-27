@@ -1,3 +1,5 @@
+// http://localhost:3000/course-section?booking=true
+
 'use client'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,28 +18,14 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Textarea } from '@/components/ui/textarea'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Checkbox } from '@/components/ui/checkbox'
-import { FormControl, FormDescription, FormItem, FormLabel } from '@/components/ui/form'
 import { PatientDetails } from '@/components/Form/PatientDetails'
 import { MedicalHistory } from '@/components/Form/MedicalHistory'
 import { FamilyDetails } from '@/components/Form/FamilyDetails'
-import { ScreeningQuestionnaire } from '@/components/Form/ScreeningQuestionnaire'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
 
 type FormData = {
   name: string
@@ -58,11 +46,11 @@ type FormData = {
 
 const steps = [
   { id: 1, name: 'Welcome', icon: User },
-  // { id: 2, name: 'Patient Details', icon: User },
-  // { id: 3, name: 'Medical History', icon: User },
-  { id: 2, name: 'Family Details', icon: CalendarIcon },
+  { id: 2, name: 'Patient Details', icon: User },
+  { id: 3, name: 'Medical History', icon: User },
+  { id: 4, name: 'Family Details', icon: CalendarIcon },
+  { id: 5, name: 'Optional Questionaire', icon: CreditCard },
   // { id: 5, name: 'Screening Questionnaire', icon: CreditCard },
-  // { id: 6, name: 'Optional Questionaire', icon: CreditCard },
 ]
 
 function Breadcrumb({ currentStep }: { currentStep: number }) {
@@ -149,8 +137,9 @@ export default function AppointmentForm() {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 4000))
     console.log(data)
-    router.push('/course-section?booking=true')
     setIsSubmitting(false)
+    // router.push('/course-section')
+    router.push('/course-section?booking=true')
     // alert('Appointment booked successfully!')
   }
 
@@ -173,6 +162,7 @@ export default function AppointmentForm() {
               This form includes questions about your health, your family members' health and any genetic testing you might have previously had. So please do have as much of this information as possible on hand before starting to fill out the form. The more specific information we have, the better our genetic experts can prepare for your session.
               You will need about 10-15 minutes to complete this form.
             </p>
+
             {/* <p> */}
             {/*   You will need about 10-15 minutes to complete this form. */}
             {/* </p> */}
@@ -195,37 +185,30 @@ export default function AppointmentForm() {
             </div>
           </CardContent>
         </>
-      // case 2:
-      //   return <PatientDetails
-      //     {...{
-      //       register,
-      //       errors,
-      //       watch,
-      //       setValue
-      //     }}
-      //   />
-      // case 2:
-      //   return (
-      //     <MedicalHistory {...{
-      //       register,
-      //       setValue,
-      //       errors
-      //     }} />
-      //   )
       case 2:
+        return <PatientDetails
+          {...{
+            register,
+            errors,
+            watch,
+            setValue
+          }}
+        />
+      case 3:
+        return (
+          <MedicalHistory {...{
+            register,
+            setValue,
+            errors
+          }} />
+        )
+      case 4:
         return (
           <FamilyDetails
-            onSubmit={onSubmit}
             {...{ register, setValue, errors }}
           />
         )
-      // case 5:
-      //   return (
-      //     <ScreeningQuestionnaire {
-      //       ...{ setValue }
-      //     } />
-      //   )
-      case 6:
+      case 5:
         return (
           <>
             <CardHeader>
@@ -396,12 +379,12 @@ These terms and conditions outline the rules and regulations for the use of Gene
               onClick={() => { }}>
               Save
             </Button>}
-            {step < 3 ? (
+            {step < 5 ? (
               <Button size="lg" type="button" onClick={() => {
                 window.scrollTo({ behavior: 'smooth', top: 0 })
                 setStep(step + 1)
               }}>
-                {step === 1 ? "Next" : "Finish"}
+                {step === 1 ? "Next" : "Next"}
               </Button>
             ) : (
               <Button size="lg" type="submit" disabled={isSubmitting}>
@@ -411,8 +394,6 @@ These terms and conditions outline the rules and regulations for the use of Gene
             )}
           </CardFooter>
         </Card>
-        {/* https://zfrmz.eu/k1BxBH35qXWGxcKefE1v */}
-        {/* https://zfrmz.eu/k1BxBH35qXWGxcKefE1v */}
         {/* https://zfrmz.eu/EEdx8WPyJmrAER51NIuG */}
         {/* https://gene-linx.com/access-to-cascade-genetic-testing */}
         {/*Booking*/}{/* Make a report */}
@@ -500,3 +481,14 @@ These terms and conditions outline the rules and regulations for the use of Gene
 
 {/*            </CardContent> */ }
 
+
+
+// const onSubmit = async (data: FormData) => {
+//   setIsSubmitting(true)
+//   // Simulate API call
+//   await new Promise(resolve => setTimeout(resolve, 4000))
+//   console.log(data)
+//   router.push('/course-section?booking=true')
+//   setIsSubmitting(false)
+//   // alert('Appointment booked successfully!')
+// }
