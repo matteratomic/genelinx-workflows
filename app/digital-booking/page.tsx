@@ -395,7 +395,6 @@ These terms and conditions outline the rules and regulations for the use of Gene
             )}
           </CardFooter>
         </Card>
-        {/* https://zfrmz.eu/EEdx8WPyJmrAER51NIuG */}
         {/* https://gene-linx.com/access-to-cascade-genetic-testing */}
         {/*Booking*/}{/* Make a report */}
         {/*education*/}{/* testing*/}{/*sign over*/}{/*Sample kit*/}
