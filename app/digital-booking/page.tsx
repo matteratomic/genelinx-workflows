@@ -391,7 +391,6 @@ These terms and conditions outline the rules and regulations for the use of Gene
               <Button
                 size="lg" type="submit" disabled={isSubmitting}>
                 Finish
-                {/* {isSubmitting ? 'Booking...' : 'Book Appointment'} */}
               </Button>
             )}
           </CardFooter>
