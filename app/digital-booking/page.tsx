@@ -380,14 +380,16 @@ These terms and conditions outline the rules and regulations for the use of Gene
               Save
             </Button>}
             {step < 5 ? (
-              <Button size="lg" type="button" onClick={() => {
+              <Button size="lg" type="button" onClick={async () => {
                 window.scrollTo({ behavior: 'smooth', top: 0 })
+                step > 3 && await new Promise(resolve => setTimeout(resolve, 1000))
                 setStep(step + 1)
               }}>
                 {step === 1 ? "Next" : "Next"}
               </Button>
             ) : (
-              <Button size="lg" type="submit" disabled={isSubmitting}>
+              <Button
+                size="lg" type="submit" disabled={isSubmitting}>
                 Finish
                 {/* {isSubmitting ? 'Booking...' : 'Book Appointment'} */}
               </Button>
