@@ -7,7 +7,8 @@ import { Eye, Plus } from 'lucide-react';
 import OTPTemplateEditor from './TemplateEditors/OTP';
 import PaymentTemplateEditor from './TemplateEditors/Payment';
 import FormBlock from './TemplateEditors/FormBlock';
-import { FamilyHistoryTemplate, MedicalHistoryTemplate, PatientDetailsTemplate } from './TemplateEditors/constants';
+import { FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScreeningQuestinnaireTemplate } from './TemplateEditors/constants';
+import BookConsultation from './TemplateEditors/BookConsultation';
 
 const templateMap = {
   'OTP Code': { template: OTPTemplateEditor },
@@ -23,8 +24,19 @@ const templateMap = {
   'Family Details': {
     template: FormBlock,
     data: FamilyHistoryTemplate
-  }
-
+  },
+  'Screening Questionnaire': {
+    template: FormBlock,
+    data: ScreeningQuestinnaireTemplate
+  },
+  'Book a Consultation': {
+    template: BookConsultation,
+    data: BookConsultation,
+  },
+  'Optional Questionnaire': {
+    template: FormBlock,
+    data: OptionalQuestionnaireTemplate
+  },
 }
 
 const BlocksModal = ({
@@ -53,7 +65,7 @@ const BlocksModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div className="relative bg-white rounded-lg w-full max-h-[84%] max-w-4xl overflow-y-auto">
+      <div className="relative bg-white rounded-lg w-full max-h-[84%] max-w-5xl overflow-y-auto">
         <div className="p-6">
           {/* <div className="flex justify-between items-center mb-8"> */}
           <div className="flex justify-between items-center mb-2">

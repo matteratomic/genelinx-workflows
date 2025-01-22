@@ -102,6 +102,7 @@ const QuestionEditor = ({ question, index, onUpdate, onDelete, onMove, totalQues
         <Label>Required</Label>
       </div>
 
+
       {/* Options for Radio and Checkbox types */}
       {(question.type === 'radio' || question.type === 'checkbox') && (
         <div>

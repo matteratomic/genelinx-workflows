@@ -90,25 +90,18 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete, onMove, to
         </Button>
       </div>
 
-      <div>
-        <Label>Question Text</Label>
-        <Textarea
-          value={localQuestion.question}
-          onChange={(e) => updateField('question', e.target.value)}
-        />
-      </div>
+      {/* <div> */}
+      {/*   <Label>Question Text</Label> */}
+      {/*   <Textarea */}
+      {/*     value={localQuestion.question} */}
+      {/*     onChange={(e) => updateField('question', e.target.value)} */}
+      {/*   /> */}
+      {/* </div> */}
 
-      <div className="flex items-center space-x-2">
-        <Switch
-          checked={localQuestion.required}
-          onCheckedChange={(checked) => updateField('required', checked)}
-        />
-        <Label>Required</Label>
-      </div>
 
-      {(localQuestion.type === 'radio' || localQuestion.type === 'checkbox') && (
+      {localQuestion.type === 'questionnaire' ? (<div className="space-y-4">
         <div>
-          <Label>Options</Label>
+          <Label>Questions</Label>
           <div className="space-y-2 mt-2">
             {localQuestion.options?.map((option, optIndex) => (
               <div key={`${localQuestion.id}-option-${optIndex}`} className="flex gap-2">
@@ -131,16 +124,85 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete, onMove, to
               className="w-full"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Option
+              Add Question
             </Button>
           </div>
         </div>
-      )}
 
-      {localQuestion.type === 'questionnaire' && (
-        <div className="space-y-4">
+        <div>
+          <Label>Sub-Questions</Label>
+          <div className="space-y-2 mt-2">
+            {localQuestion.subQuestions?.map((subQuestion, subIndex) => (
+              <div key={`${localQuestion.id}-subq-${subIndex}`} className="flex gap-2">
+                <Input
+                  value={subQuestion.text}
+                  onChange={(e) => {
+                    const newSubQuestions = [...(localQuestion.subQuestions || [])];
+                    newSubQuestions[subIndex] = {
+                      ...newSubQuestions[subIndex],
+                      text: e.target.value
+                    };
+                    updateField('subQuestions', newSubQuestions);
+                  }}
+                  placeholder="Enter sub-question text"
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => {
+                    const newSubQuestions = localQuestion.subQuestions.filter((_, idx) => idx !== subIndex);
+                    updateField('subQuestions', newSubQuestions);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              variant="outline"
+              onClick={() => {
+                const newSubQuestions = [
+                  ...(localQuestion.subQuestions || []),
+                  {
+                    id: `subq-${(localQuestion.subQuestions?.length || 0) + 1}`,
+                    text: `Sub-question ${(localQuestion.subQuestions?.length || 0) + 1}`
+                  }
+                ];
+                updateField('subQuestions', newSubQuestions);
+              }}
+              className="w-full"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Sub-Question
+            </Button>
+          </div>
+        </div>
+
+        <p className="text-sm text-gray-500 italic mt-2">
+          Note: These options are shared across all questionnaire sub-questions.
+        </p>
+      </div>) :
+        <div>
+          <Label>Question Text</Label>
+          <Textarea
+            value={localQuestion.question}
+            onChange={(e) => updateField('question', e.target.value)}
+          />
+        </div>
+      }
+
+      <div className="flex items-center space-x-2">
+        <Switch
+          checked={localQuestion.required}
+          onCheckedChange={(checked) => updateField('required', checked)}
+        />
+        <Label>Required</Label>
+      </div>
+
+      {
+        (localQuestion.type === 'radio' || localQuestion.type === 'checkbox') && (
           <div>
-            <Label>Shared Questionnaire Options</Label>
+            <Label>Options</Label>
             <div className="space-y-2 mt-2">
               {localQuestion.options?.map((option, optIndex) => (
                 <div key={`${localQuestion.id}-option-${optIndex}`} className="flex gap-2">
@@ -163,65 +225,100 @@ export const QuestionEditor = ({ question, index, onUpdate, onDelete, onMove, to
                 className="w-full"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Shared Option
+                Add Option
               </Button>
             </div>
           </div>
+        )
+      }
 
-          <div>
-            <Label>Sub-Questions</Label>
-            <div className="space-y-2 mt-2">
-              {localQuestion.subQuestions?.map((subQuestion, subIndex) => (
-                <div key={`${localQuestion.id}-subq-${subIndex}`} className="flex gap-2">
-                  <Input
-                    value={subQuestion.text}
-                    onChange={(e) => {
-                      const newSubQuestions = [...(localQuestion.subQuestions || [])];
-                      newSubQuestions[subIndex] = {
-                        ...newSubQuestions[subIndex],
-                        text: e.target.value
-                      };
-                      updateField('subQuestions', newSubQuestions);
-                    }}
-                    placeholder="Enter sub-question text"
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => {
-                      const newSubQuestions = localQuestion.subQuestions.filter((_, idx) => idx !== subIndex);
-                      updateField('subQuestions', newSubQuestions);
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                variant="outline"
-                onClick={() => {
-                  const newSubQuestions = [
-                    ...(localQuestion.subQuestions || []),
-                    {
-                      id: `subq-${(localQuestion.subQuestions?.length || 0) + 1}`,
-                      text: `Sub-question ${(localQuestion.subQuestions?.length || 0) + 1}`
-                    }
-                  ];
-                  updateField('subQuestions', newSubQuestions);
-                }}
-                className="w-full"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Sub-Question
-              </Button>
+      {
+        localQuestion.type === 'questionnaire' && (
+          <div className="space-y-4">
+            <div>
+              <Label>Shared Questionnaire Options</Label>
+              <div className="space-y-2 mt-2">
+                {localQuestion.options?.map((option, optIndex) => (
+                  <div key={`${localQuestion.id}-option-${optIndex}`} className="flex gap-2">
+                    <Input
+                      value={option}
+                      onChange={(e) => updateOption(optIndex, e.target.value)}
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeOption(optIndex)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="outline"
+                  onClick={addOption}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Shared Option
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <p className="text-sm text-gray-500 italic mt-2">
-            Note: These options are shared across all questionnaire sub-questions.
-          </p>
-        </div>
-      )}
-    </Card>
+            <div>
+              <Label>Sub-Questions</Label>
+              <div className="space-y-2 mt-2">
+                {localQuestion.subQuestions?.map((subQuestion, subIndex) => (
+                  <div key={`${localQuestion.id}-subq-${subIndex}`} className="flex gap-2">
+                    <Input
+                      value={subQuestion.text}
+                      onChange={(e) => {
+                        const newSubQuestions = [...(localQuestion.subQuestions || [])];
+                        newSubQuestions[subIndex] = {
+                          ...newSubQuestions[subIndex],
+                          text: e.target.value
+                        };
+                        updateField('subQuestions', newSubQuestions);
+                      }}
+                      placeholder="Enter sub-question text"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        const newSubQuestions = localQuestion.subQuestions.filter((_, idx) => idx !== subIndex);
+                        updateField('subQuestions', newSubQuestions);
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const newSubQuestions = [
+                      ...(localQuestion.subQuestions || []),
+                      {
+                        id: `subq-${(localQuestion.subQuestions?.length || 0) + 1}`,
+                        text: `Sub-question ${(localQuestion.subQuestions?.length || 0) + 1}`
+                      }
+                    ];
+                    updateField('subQuestions', newSubQuestions);
+                  }}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Sub-Question
+                </Button>
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-500 italic mt-2">
+              Note: These options are shared across all questionnaire sub-questions.
+            </p>
+          </div>
+        )
+      }
+    </Card >
   );
 };
