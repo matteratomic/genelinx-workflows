@@ -3,8 +3,16 @@
 import CreateNewBlock from "@/components/CreateNewBlock";
 import { Button } from "@/components/ui/button";
 import { Cuboid, Eye, Grid2X2, Plus } from "lucide-react";
-import { describe } from "node:test";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Type for a saved block
+interface SavedBlock {
+  id: string;
+  name: string;
+  type: string;
+  template: any;
+  createdAt: Date;
+}
 
 const workflowBlocks = [
   { id: 1, title: 'OTP Code', description: "Creates an OTP Code block" },
@@ -21,33 +29,81 @@ const workflowBlocks = [
   { id: 12, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 
-const Block = ({ i, text }: { i: number, text: string }) => {
+const Block = ({ block, onEdit }: { block: SavedBlock; onEdit: () => void }) => {
   return <div className="px-4 flex items-center justify-between w-full bg-white h-20 rounded-md shadow-md">
     <div className="flex items-center justify-between space-x-4">
       <div
         style={{ backgroundImage: "url(/ellipse.png)" }}
         className="w-9 h-9 rounded-full bg-cover bg-center flex items-center justify-center text-white font-semibold">
-        <p>{i + 1}</p>
+        <p>{block.id}</p>
       </div>
-      <p className="font-semibold">{text}</p>
+      <div>
+        <p className="font-semibold">{block.name}</p>
+        <p className="text-sm text-gray-500">{block.type}</p>
+      </div>
     </div>
     <div className="flex items-center justify-center space-x-4">
-      <Button size="lg" type="button">Edit</Button>
+      <Button size="lg" type="button" onClick={onEdit}>Edit</Button>
       <Eye />
     </div>
   </div>
 }
-const customBlocks = [];
 
 export default function Blocks() {
   const [tab, setTab] = useState('templates')
-  const [templateDialogOpen, setTemplateDialogOpen] = useState(false)
   const [createBlockDialogOpen, setCreateBlockDialogOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState('')
-  const [blocks, setBlocks] = useState([])
+  const [savedBlocks, setSavedBlocks] = useState<SavedBlock[]>([])
+  const [selectedBlock, setSelectedBlock] = useState<SavedBlock | null>(null)
 
+  // Load saved blocks from localStorage on mount
+  useEffect(() => {
+    const loadedBlocks = localStorage.getItem('savedBlocks')
+    if (loadedBlocks) {
+      setSavedBlocks(JSON.parse(loadedBlocks))
+    }
+  }, [])
 
-  const toggleModal = () => setCreateBlockDialogOpen(!createBlockDialogOpen)
+  // Save blocks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('savedBlocks', JSON.stringify(savedBlocks))
+  }, [savedBlocks])
+
+  const toggleModal = () => {
+    setCreateBlockDialogOpen(!createBlockDialogOpen)
+    if (!createBlockDialogOpen) {
+      setSelectedBlock(null)
+    }
+  }
+
+  const handleSaveBlock = (blockName: string, template: any) => {
+    if (selectedBlock) {
+      // Update existing block
+      setSavedBlocks(blocks => blocks.map(block =>
+        block.id === selectedBlock.id
+          ? { ...block, name: blockName, template }
+          : block
+      ))
+    } else {
+      // Create new block
+      const newBlock: SavedBlock = {
+        id: (savedBlocks.length + 1).toString(),
+        name: blockName,
+        type: selectedTemplate,
+        template,
+        createdAt: new Date()
+      }
+      setSavedBlocks([...savedBlocks, newBlock])
+    }
+    setTab('saved')
+    toggleModal()
+  }
+
+  const handleEditBlock = (block: SavedBlock) => {
+    setSelectedBlock(block)
+    setSelectedTemplate(block.type)
+    setCreateBlockDialogOpen(true)
+  }
 
   return <div className="min-h-screen p-8 bg-[#f6f6f6] w-full">
     <div>
@@ -57,13 +113,21 @@ export default function Blocks() {
       </p>
     </div>
     <div className="rounded-md h-12 w-1/3 bg-white my-6 p-2 flex items-center justify-between space-x-4">
-      <div role="button" onClick={() => setTab('templates')} className={`rounded-md ${tab === 'templates' ? 'bg-black text-white font-semibold' : 'text-black font-medium'} w-1/2 h-full flex items-center justify-center cursor-pointer`}>Templates</div>
-      <div role="button" onClick={() => {
-        setSelectedTemplate('')
-        setTab('saved')
-      }} className={`rounded-md ${tab !== 'templates' ? 'bg-black text-white font-semibold' : 'text-black font-medium'} w-1/2 h-full flex items-center justify-center cursor-pointer`}>Saved Blocks</div>
+      <div
+        role="button"
+        onClick={() => setTab('templates')}
+        className={`rounded-md ${tab === 'templates' ? 'bg-black text-white font-semibold' : 'text-black font-medium'} w-1/2 h-full flex items-center justify-center cursor-pointer`}>
+        Templates
+      </div>
+      <div
+        role="button"
+        onClick={() => setTab('saved')}
+        className={`rounded-md ${tab !== 'templates' ? 'bg-black text-white font-semibold' : 'text-black font-medium'} w-1/2 h-full flex items-center justify-center cursor-pointer`}>
+        Saved Blocks
+      </div>
     </div>
-    <div className={`${tab !== 'templates' && !customBlocks.length ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}>
+
+    <div className={`${tab !== 'templates' && !savedBlocks.length ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}>
       {tab === 'templates' ?
         workflowBlocks.map((block, i) => {
           return <div
@@ -76,7 +140,8 @@ export default function Blocks() {
             style={{
               backgroundSize: "150%",
               backgroundImage: "url('/workflow-block-image.png')"
-            }} className="bg-center duration-100 hover:scale-105 relative cursor-pointer flex flex-col items-center justify-center rounded-md w-auto h-48 font-medium bg-cover bg-no-repeat text-white text-xl">
+            }}
+            className="bg-center duration-100 hover:scale-105 relative cursor-pointer flex flex-col items-center justify-center rounded-md w-auto h-48 font-medium bg-cover bg-no-repeat text-white text-xl">
             <div className="top-2 mb-4 left-2 w-8 h-8 rounded-full bg-white text-teal-800 flex items-center justify-center font-semibold">
               {block.id}
             </div>
@@ -87,16 +152,23 @@ export default function Blocks() {
           </div>
         })
         :
-        blocks.length ?
+        savedBlocks.length ?
           <div className="flex flex-col space-y-6 w-10/12">
-            {blocks.map((block, i) => {
-              return <Block key={i} i={i} text={block} />
-            })}
+            {savedBlocks.map((block) => (
+              <Block
+                key={block.id}
+                block={block}
+                onEdit={() => handleEditBlock(block)}
+              />
+            ))}
           </div>
-          : <div className="relative w-full flex flex-col items-center justify-center h-96">
+          :
+          <div className="relative w-full flex flex-col items-center justify-center h-96">
             <Cuboid strokeWidth={1} className="w-32 h-32 text-gray-800" />
             <div className="mt-4 text-xl font-medium text-gray-800">No custom blocks saved</div>
-            <div className="mt-1 font-medium text-gray-400 w-96 text-center">To get started, create and save a custom block from the templates provided</div>
+            <div className="mt-1 font-medium text-gray-400 w-96 text-center">
+              To get started, create and save a custom block from the templates provided
+            </div>
             <Button onClick={toggleModal} className="mt-6 bg-green-800 text-white hover:bg-green-700">
               <Plus className="w-4 h-4 mr-2" />
               Add new block
@@ -104,21 +176,15 @@ export default function Blocks() {
           </div>
       }
     </div>
-    {createBlockDialogOpen ?
+
+    {createBlockDialogOpen && (
       <CreateNewBlock
         onClose={toggleModal}
         selectedTemplate={selectedTemplate}
         setSelectedTemplate={setSelectedTemplate}
-        blocks={blocks}
-        setBlocks={setBlocks}
-        onSave={(blockName) => {
-          if (selectedTemplate) {
-            setBlocks([...blocks, blockName])
-            setTab('saved')
-            toggleModal()
-          }
-        }}
+        onSave={handleSaveBlock}
+        existingBlock={selectedBlock}
       />
-      : null}
+    )}
   </div>
 }

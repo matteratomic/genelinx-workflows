@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import PatientFormEditor from './FormBlock';
-import { PatientDetails } from '../Form/PatientDetails';
-import { BookingConsultationTemplate, MedicalHistoryTemplate, PatientDetailsTemplate } from './constants';
+import FormBlock from './FormBlock';
+import { BookingConsultationTemplate } from './constants';
 import { GripVertical } from 'lucide-react';
 // import PatientFormEditor from './PatientFormEditor';
 
@@ -97,7 +94,7 @@ const DraggableSteps = ({ steps, currentStep, onStepChange, onReorder }) => {
   );
 };
 
-const FormContainer = () => {
+const FormContainer = ({ isWorkflowBlock }) => {
   const [steps, setSteps] = useState(BookingConsultationTemplate.steps);
   const [currentStep, setCurrentStep] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -111,14 +108,14 @@ const FormContainer = () => {
 
   const renderStepIndicator = () => {
     return (
-      <div className="flex items-center gap-2 mb-6">
+      <div className="relative custom-scrollbar flex items-center gap-2 mb-6 overflow-x-auto pb-4">
+        {/* <div className="absolute h-full w-1/12 bg-gradient-to-tr from-transparent via-white/50 to-white right-0"></div> */}
         {BookingConsultationTemplate.steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <Button
               variant={currentStep === index ? "default" : "outline"}
               className="text-sm"
-              onClick={() => setCurrentStep(index)}
-            >
+              onClick={() => setCurrentStep(index)}>
               {step.title}
             </Button>
             {index < BookingConsultationTemplate.steps.length - 1 && (
@@ -151,13 +148,14 @@ const FormContainer = () => {
     return (
       <div className="mb-6">
         {steps.map((_, i) => {
-          return <><PatientFormEditor
+          return <><FormBlock
             hidden={i !== currentStep}
             // data={BookingConsultationTemplate.steps[i].template}
             // data={BookingConsultationTemplate.steps[currentStep].template}
             data={steps[i].template}
             watchData={steps[i].template}
             isEditing={isEditing}
+            isWorkflowBlock={isWorkflowBlock}
             onSave={() => setIsEditing(false)}
           />
             {/* {currentStep} */}
@@ -198,19 +196,35 @@ const FormContainer = () => {
     <div className="max-w-5xl mx-auto p-6">
       <Card>
         <CardContent className="p-8">
-          {/* {renderStepIndicator()} */}
-          {/* {renderHeader()} */}
-          <DraggableSteps
+          {isWorkflowBlock ? renderStepIndicator() : <DraggableSteps
             steps={steps}
             currentStep={currentStep}
             onStepChange={setCurrentStep}
             onReorder={handleReorder}
           />
+          }
+          {/* {renderHeader()} */}
           {renderCurrentStep()}
           <p className="text-gray-600 italic text-sm mb-6">{BookingConsultationTemplate.contactInfo}</p>
           {renderFooter()}
         </CardContent>
       </Card>
+      <style jsx global>{`
+.custom-scrollbar::-webkit-scrollbar {
+  {/* width: 12px; */}
+height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1c6461; /* Thumb color */
+  border-radius: 6px;
+}
+`}</style>
     </div>
   );
 };

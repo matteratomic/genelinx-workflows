@@ -237,42 +237,11 @@ const QuestionEditor = ({ question, index, onUpdate, onDelete, onMove, totalQues
   );
 };
 
-const PatientFormEditor = ({ data, hidden, watchData }) => {
-  const ref = useRef(false)
-  const [isEditing, setIsEditing] = useState(false);
-  const [template, setTemplate] = useState(data);
-  const [previousTemplates, setPreviousTemplates] = useState([data]);
-  const [savedTemplate, setSavedTemplate] = useState({ ...template });
-
-  useEffect(() => {
-    if (!ref.current) {
-      ref.current = true
-      return
-    }
-    // console.log(watchData)
-    const prev = previousTemplates.find((prev) => {
-      return prev.title === data.title
-    })
-    if (prev) {
-      setTemplate(prev)
-    } else {
-      setTemplate(data)
-      setPreviousTemplates([...previousTemplates, data])
-    }
-  }, [data, ref])
-
-
-  const handleSave = () => {
-    setSavedTemplate({ ...template });
-    setIsEditing(false);
-  };
-
-  const handleRevert = () => {
-    setTemplate({ ...savedTemplate });
-    setIsEditing(false);
-  };
+// const PatientFormEditor = ({ data, hidden, watchData }) => {
+const PatientFormEditor = ({ isWorkflowBlock, data, hidden, watchData, isEditing: propIsEditing }) => {
 
   const handleQuestionUpdate = (index, updatedQuestion) => {
+
     setTemplate(prevTemplate => {
       const newQuestions = [...prevTemplate.questions];
       newQuestions[index] = updatedQuestion;
@@ -326,9 +295,58 @@ const PatientFormEditor = ({ data, hidden, watchData }) => {
     }));
   };
 
+  const ref = useRef(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [template, setTemplate] = useState({
+    title: '',
+    subtitle: '',
+    questions: []
+  });
+  const [previousTemplates, setPreviousTemplates] = useState([]);
+  const [savedTemplate, setSavedTemplate] = useState(null);
+
+  useEffect(() => {
+    // Initialize template with data or default values
+    if (data) {
+      setTemplate(data);
+      setSavedTemplate(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!ref.current) {
+      ref.current = true;
+      return;
+    }
+
+    const prev = previousTemplates.find((prev) => {
+      return prev?.title === data?.title;
+    });
+
+    if (prev) {
+      setTemplate(prev);
+    } else if (data) {
+      setTemplate(data);
+      setPreviousTemplates([...previousTemplates, data]);
+    }
+  }, [data, ref]);
+
+  const handleSave = () => {
+    setSavedTemplate({ ...template });
+    setIsEditing(false);
+  };
+
+  const handleRevert = () => {
+    if (savedTemplate) {
+      setTemplate({ ...savedTemplate });
+    }
+    setIsEditing(false);
+  }
+
+
   return (
     <div className={`${hidden ? "hidden" : "block"} w-full mx-auto p-4 space-y-4 overflow-x-auto`}>
-      <div className="flex space-x-2">
+      {!isWorkflowBlock && (<div className="flex space-x-2">
         <Button
           variant={isEditing ? "outline" : "default"}
           onClick={() => setIsEditing(!isEditing)}
@@ -348,7 +366,7 @@ const PatientFormEditor = ({ data, hidden, watchData }) => {
             </Button>
           </>
         )}
-      </div>
+      </div>)}
 
       <div className="grid grid-cols-1 gap-4">
         {isEditing && (

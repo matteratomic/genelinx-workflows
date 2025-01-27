@@ -1,45 +1,152 @@
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
+'use client'
 
-const arr = [
-  'OTP Code',
-  'Book a Consultation',
-  'Payment Request',
-  'Schedule Appointment',
-  'Consultation Form',
-  'Question & Answer'
-]
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Card } from '@/components/ui/card';
+import OTPTemplateEditor from '@/components/TemplateEditors/OTP';
+import PaymentTemplateEditor from '@/components/TemplateEditors/Payment';
+import FormBlock from '@/components/TemplateEditors/FormBlock';
+import { BookingConsultationTemplate, FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScreeningQuestinnaireTemplate } from '@/components/TemplateEditors/constants';
+import BookConsultation from '@/components/TemplateEditors/BookConsultation';
+import { useRouter } from 'next/navigation';
 
-export default function WorkflowPage() {
+const blockComponents = {
+  'OTP Code': { component: OTPTemplateEditor },
+  'Payment Request': { component: PaymentTemplateEditor },
+  'Patient Details': {
+    component: FormBlock,
+    data: PatientDetailsTemplate
+  },
+  'Medical History': {
+    component: FormBlock,
+    data: MedicalHistoryTemplate
+  },
+  'Family Details': {
+    component: FormBlock,
+    data: FamilyHistoryTemplate
+  },
+  'Screening Questionnaire': {
+    component: FormBlock,
+    data: ScreeningQuestinnaireTemplate
+  },
+  'Book a Consultation': {
+    component: BookConsultation,
+    data: BookingConsultationTemplate,
+  },
+  'Optional Questionnaire': {
+    component: FormBlock,
+    data: OptionalQuestionnaireTemplate
+  },
+};
+
+export default function WorkflowViewer({ params }) {
+  const [workflow, setWorkflow] = useState(null);
+  const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
+  const [blockData, setBlockData] = useState({});
+  const router = useRouter();
+
+  useEffect(() => {
+    // Load workflow from localStorage
+    const workflows = JSON.parse(localStorage.getItem('workflows') || '[]');
+    const currentWorkflow = workflows.find(w => w.id === params.workflow);
+    if (currentWorkflow) {
+      setWorkflow(currentWorkflow);
+    }
+  }, [params.workflow]);
+
+  if (!workflow) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
+  const currentBlock = workflow.blocks[currentBlockIndex];
+  const progress = ((currentBlockIndex + 1) / workflow.blocks.length) * 100;
+
+  const BlockComponent = blockComponents[currentBlock.title]?.component;
+  const defaultData = blockComponents[currentBlock.title]?.data;
+
+  const handleNext = () => {
+    if (currentBlockIndex < workflow.blocks.length - 1) {
+      setCurrentBlockIndex(currentBlockIndex + 1);
+    } else {
+      router.push('/dashboard/home');
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentBlockIndex > 0) {
+      setCurrentBlockIndex(currentBlockIndex - 1);
+    }
+  };
+
+  const handleBlockDataChange = (data) => {
+    setBlockData({
+      ...blockData,
+      [currentBlock.id]: data
+    });
+  };
+
   return (
-    <div className="p-8 bg-[#f6f6f6] w-full">
-      <div>
-        <h1 className="text-4xl font-bold text-teal-900">Telegenetics</h1>
-        <p className="text-slate-600 mt-3 w-6/12">
-          Virtual genetic consultation to discuss family history and potential inherited health conditions.
-        </p>
-      </div>
-      <div className="mt-12">
-        <h2 className="text-2xl font-semibold text-teal-900 mb-6">Blocks</h2>
-      </div>
-      <div className="flex flex-col space-y-6 w-10/12">
-        {arr.map((x, i) => {
-          return <div key={i} className="px-4 flex items-center justify-between w-full bg-white h-20 rounded-md shadow-md">
-            <div className="flex items-center justify-between space-x-4">
-              <div
-                style={{ backgroundImage: "url(/ellipse.png)" }}
-                className="w-9 h-9 rounded-full bg-cover bg-center flex items-center justify-center text-white font-semibold">
-                <p>{i + 1}</p>
-              </div>
-              <p className="font-semibold">{x}</p>
-            </div>
-            <div className="flex items-center justify-center space-x-4">
+    <div className="min-h-screen bg-[#f6f6f6] w-full">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-teal-900">{workflow.name}</h1>
+          <p className="text-gray-600 mt-2">{workflow.description}</p>
+        </div>
 
-              <Button size="lg" type="button">Edit</Button>
-              <Eye />
-            </div>
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex justify-between text-sm text-gray-600 mb-2">
+            <span>Block {currentBlockIndex + 1} of {workflow.blocks.length}</span>
+            <span>{Math.round(progress)}% Complete</span>
           </div>
-        })}
+          <Progress value={progress} className="h-2" />
+        </div>
+
+        {/* Block Navigation */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {workflow.blocks.map((block, index) => (
+            <button
+              key={block.id}
+              onClick={() => setCurrentBlockIndex(index)}
+              className={`px-4 py-2 rounded-md whitespace-nowrap ${index === currentBlockIndex
+                ? 'bg-teal-800 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+            >
+              {block.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Current Block */}
+        <Card className="mb-8">
+          {BlockComponent && (
+            <BlockComponent
+              data={blockData[currentBlock.id] || defaultData}
+              onTemplateChange={handleBlockDataChange}
+              isPreview={true}
+            />
+          )}
+        </Card>
+
+        {/* Navigation Buttons */}
+        <div className="flex justify-between">
+          <Button
+            onClick={handlePrevious}
+            disabled={currentBlockIndex === 0}
+            variant="outline"
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={handleNext}
+            className="bg-teal-800 text-white hover:bg-teal-700"
+          >
+            {currentBlockIndex === workflow.blocks.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </div>
       </div>
     </div>
   );

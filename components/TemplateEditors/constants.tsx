@@ -1,4 +1,13 @@
+import { Calendar, Info, NotebookPen } from "lucide-react";
 import { useSelectMultiple } from "react-day-picker";
+
+export const OTPTemplate = {
+  title: 'Email Confirmation',
+  description: "We'd like to confirm your email address before proceeding further",
+  emailLabel: 'Email',
+  buttonText: 'Send OTP',
+  placeholderText: 'Enter your email'
+}
 
 export const PatientDetailsTemplate = {
   title: "Patient Details",
@@ -691,7 +700,132 @@ export const BookingConsultationTemplate = {
       id: "optional_questionnaire",
       title: "Optional Questionnaire",
       template: OptionalQuestionnaireTemplate // Your existing screening template
-    }
+    },
   ]
 };
 ;
+
+export const BookingTemplate = {
+  title: "Book a Consultation",
+  subtitle: "You can book your appointment with a genetic expert in a few simple steps. Please carefully select the time zone you are based in and make sure that the contact details provided are correct. Speak with you soon!",
+  service: {
+    title: "Initial Consult - Cancer",
+    price: "249 EUR",
+    duration: "30 mins"
+  },
+  calendar: {
+    timezones: [
+      { value: "nairobi", label: "Africa/Nairobi - EAT (+03:00)" },
+      { value: "london", label: "Europe/London - GMT (+00:00)" },
+      { value: "newyork", label: "America/New_York - EST (-05:00)" }
+    ],
+    morningSlots: ["11:00", "11:15"],
+    nightSlots: ["22:00", "22:15", "22:30", "22:45", "23:00", "23:15"]
+  },
+  form: {
+    fields: [
+      { id: "firstName", label: "Patient's First Name", placeholder: "Patient's First Name", type: "text", required: true },
+      { id: "lastName", label: "Last Name", placeholder: "Last Name", type: "text", required: true },
+      { id: "dob", label: "Date of Birth", type: "date", required: true },
+      { id: "email", label: "Email", placeholder: "Email", type: "email", required: true },
+      { id: "phone", label: "Phone Number", placeholder: "Contact Number", type: "tel", required: true },
+      {
+        id: "country", label: "Country of Residence", type: "select", required: true,
+        options: [
+          { value: "kenya", label: "Kenya" },
+          { value: "uganda", label: "Uganda" },
+          { value: "tanzania", label: "Tanzania" }
+        ]
+      }
+    ],
+    countryCode: {
+      default: "+254",
+      options: [
+        { value: "+254", label: "+254" },
+        { value: "+256", label: "+256" },
+        { value: "+255", label: "+255" }
+      ]
+    }
+  },
+  consent: {
+    contract: "I acknowledge and agree that I forfeit my right to revoke the contract once GeneLinx starts providing the service with my consent and I understand that the 48 hour cancellation policy of GeneLinx will still apply",
+    health: "I consent to the processing of my health data and genetic data in the form of medical and family history for this purpose - This consent can be withdrawn in the future - Please refer to our privacy policy",
+    transfer: "I consent to my data including health and genetic data to be transferred to the assigned Genetic Expert in order to schedule an appointment - This consent can be withdrawn in the future - Please refer to our privacy policy",
+    terms: "I acknowledge that I have read, understood and agree to GeneLinx's terms of service and privacy policy"
+  }
+}
+
+export const ScheduleAppointmentTemplate = {
+  title: "Book an initial consultation",
+  subtitle: "Understand your risks, if genetic testing is right for you and which test might help you.",
+  learnMoreText: "To learn more about your journey with GeneLinx,",
+  learnMoreLinkText: "click here",
+  sections: [
+    {
+      id: 'cancer',
+      title: 'Cancer',
+      price: '€249',
+      image: 'https://gene-linx.com/wp-content/uploads/2024/06/Image-217-1.png',
+      items: [
+        "I was diagnosed with cancer",
+        "I have a family history of cancer",
+        "I need to be tested for a familial cancer genetic change",
+        "I need guidance on selecting the right test"
+      ]
+    },
+    {
+      id: 'reproductive',
+      title: 'Reproductive',
+      price: '€249',
+      image: 'https://gene-linx.com/wp-content/uploads/2024/06/2566956f-1c28-4b79-aa7c-d02a303949f1-scaled.jpg',
+      items: [
+        "I am planning a pregnancy and want to know my risks",
+        "I have a history of stillbirths or miscarriages",
+        "I want to understand genetic test options in pregnancy",
+        "I have a family history of disease and want to know the risks to my future pregnancy"
+      ]
+    },
+    {
+      id: 'proactive',
+      title: 'Proactive',
+      price: '€249',
+      image: 'https://gene-linx.com/wp-content/uploads/2024/06/da10fbd7-db1e-4dd8-83b6-acfe473b24d3-scaled-e1724788042727.jpg',
+      items: [
+        "I am healthy and curious about genetic testing for preventive health",
+        "I want to know my risk for common genetic diseases",
+        "I need guidance on the right preventive genetic test",
+        "I have results from a genetic test and want to discuss my results"
+      ]
+    },
+    {
+      id: 'other',
+      title: 'Other Indications',
+      price: '€249',
+      image: 'https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d1-scaled-e1724787499961.jpg',
+      items: [
+        "I have a genetic disease that is not cancer",
+        "I have a family history of a disease that could be genetic (not cancer)",
+        "There is a disease-causing genetic change in my family (not cancer)",
+        "I want to discuss my previous test results (not cancer or proactive)"
+      ]
+    }
+  ],
+  faq: {
+    title: "Frequently asked questions",
+    questions: [
+      {
+        question: "What is genetic counselling and who provides this?",
+        answer: "Genetic counselling is a healthcare service that provides information and support to people who have, or may be at risk for, genetic conditions. It is provided by certified genetic counsellors who have specialized training in medical genetics and counselling."
+      },
+      {
+        question: "Who should have genetic counselling?",
+        answer: "Genetic counselling may be beneficial for individuals who have a personal or family history of genetic conditions, are planning a pregnancy, have experienced multiple miscarriages, or are interested in understanding their genetic health risks."
+      }
+      // Add more FAQ items as needed
+    ]
+  },
+  unsureSection: {
+    title: "Unsure of which service to choose?",
+    contactLink: "Contact us"
+  }
+}

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Settings2, Save, Undo } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const TemplateEditor = ({ blockName, setBlockName }) => {
+const OTPTemplateEditor = ({ blockName, setBlockName,
+  data,
+  onTemplateChange,
+  isWorkflowBlock }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [template, setTemplate] = useState({
-    blockName: "",
     title: 'Email Confirmation',
     description: "We'd like to confirm your email address before proceeding further",
     emailLabel: 'Email',
@@ -15,29 +17,47 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
     placeholderText: 'Enter your email'
   });
 
-  const [savedTemplate, setSavedTemplate] = useState({ ...template });
+  // Load initial data if provided
+  useEffect(() => {
+    if (data) {
+      setTemplate(data);
+    }
+  }, [data]);
 
   const handleSave = () => {
-    setSavedTemplate({ ...template });
     setIsEditing(false);
+    // Notify parent of template changes
+    onTemplateChange(template);
   };
 
   const handleRevert = () => {
-    setTemplate({ ...savedTemplate });
+    setTemplate(data || {
+      title: 'Email Confirmation',
+      description: "We'd like to confirm your email address before proceeding further",
+      emailLabel: 'Email',
+      buttonText: 'Send OTP',
+      placeholderText: 'Enter your email'
+    });
     setIsEditing(false);
   };
 
+  const updateTemplate = (field: string, value: string) => {
+    const updatedTemplate = { ...template, [field]: value };
+    setTemplate(updatedTemplate);
+    // Notify parent of template changes
+    onTemplateChange(updatedTemplate);
+  };
+
   return (
-    // <div className="w-full max-w-2xl mx-auto p-4 space-y-4">
     <div className="w-full max-w-xl p-6 pt-0 space-y-4">
       <div className="flex justify-start space-x-2">
-        <Button
+        {!isWorkflowBlock && <Button
           variant={isEditing ? "outline" : "default"}
           onClick={() => setIsEditing(!isEditing)}
         >
           <Settings2 className="w-4 h-4 mr-2" />
           {isEditing ? 'Editing Mode' : 'Edit Template'}
-        </Button>
+        </Button>}
         {isEditing && (
           <>
             <Button onClick={handleSave} variant="default">
@@ -57,21 +77,10 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
           {isEditing ? (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Block Name</label>
-                <Input
-                  // value={template.blockName}
-                  value={blockName}
-                  // onChange={(e) => setTemplate({ ...template, blockName: e.target.value })}
-                  onChange={(e) => setBlockName(e.target.value)}
-                  className="w-full"
-                  placeholder="Enter a name for this block."
-                />
-              </div>
-              <div>
                 <label className="block text-sm font-medium mb-1">Title</label>
                 <Input
                   value={template.title}
-                  onChange={(e) => setTemplate({ ...template, title: e.target.value })}
+                  onChange={(e) => updateTemplate('title', e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -79,7 +88,7 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
                 <label className="block text-sm font-medium mb-1">Description</label>
                 <Input
                   value={template.description}
-                  onChange={(e) => setTemplate({ ...template, description: e.target.value })}
+                  onChange={(e) => updateTemplate('description', e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -87,7 +96,7 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
                 <label className="block text-sm font-medium mb-1">Email Label</label>
                 <Input
                   value={template.emailLabel}
-                  onChange={(e) => setTemplate({ ...template, emailLabel: e.target.value })}
+                  onChange={(e) => updateTemplate('emailLabel', e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -95,7 +104,7 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
                 <label className="block text-sm font-medium mb-1">Placeholder Text</label>
                 <Input
                   value={template.placeholderText}
-                  onChange={(e) => setTemplate({ ...template, placeholderText: e.target.value })}
+                  onChange={(e) => updateTemplate('placeholderText', e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -103,7 +112,7 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
                 <label className="block text-sm font-medium mb-1">Button Text</label>
                 <Input
                   value={template.buttonText}
-                  onChange={(e) => setTemplate({ ...template, buttonText: e.target.value })}
+                  onChange={(e) => updateTemplate('buttonText', e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -132,4 +141,4 @@ const TemplateEditor = ({ blockName, setBlockName }) => {
   );
 };
 
-export default TemplateEditor;
+export default OTPTemplateEditor;
