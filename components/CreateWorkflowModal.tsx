@@ -28,10 +28,15 @@ const workflowBlocks: WorkflowBlock[] = [
   { id: 4, title: 'Patient Details', description: "Creates a patient details block" },
   { id: 5, title: 'Medical History', description: "Creates a medical history block" },
   { id: 6, title: 'Family Details', description: "Creates a family details block" },
-  { id: 7, title: 'Screening Questionnaire', description: "Creates a questionnaire block" },
-  { id: 8, title: 'Optional Questionnaire', description: "Creates a optional questionnaire block" },
-  { id: 9, title: 'Consultation Form', description: "Creates a consultation block" },
-  { id: 10, title: 'Schedule Appointment', description: "Creates a schedule appointment block" },
+  { id: 14, title: 'Landing Page', description: "Creates a landing page block" },
+  { id: 7, title: 'Make a Course', description: "Creates a Course block" },
+  { id: 8, title: 'Screening Questionnaire', description: "Creates a questionnaire block" },
+  { id: 9, title: 'Optional Questionnaire', description: "Creates a optional questionnaire block" },
+  { id: 10, title: 'Consultation Form', description: "Creates a consultation block" },
+  { id: 11, title: 'Schedule Appointment', description: "Creates a schedule appointment block" },
+  { id: 12, title: 'Consultation Form', description: "Creates a consultation form block" },
+  { id: 15, title: 'Submission Result', description: "Creates a submission result block" },
+  // { id: 13, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 
 interface CreateWorkflowModalProps {
@@ -102,8 +107,9 @@ const CreateWorkflowModal: React.FC<CreateWorkflowModalProps> = ({
   };
 
   return (
-    <div className="fixed z-10 inset-0 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed z-10 inset-0 bg-black/50 flex items-center justify-center p-4 pt-20">
+      <div
+        className="custom-horizontal-scrollbar bg-white rounded-md w-full max-w-4xl max-h-[84vh] overflow-y-auto px-4">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -216,6 +222,21 @@ const CreateWorkflowModal: React.FC<CreateWorkflowModalProps> = ({
           </div>
         </div>
       </div>
+      <style jsx global>{`
+.custom-horizontal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+  border-radius: 6px;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: #1c6461; /* Thumb color */
+  border-radius: 6px;
+}
+`}</style>
     </div>
   );
 };

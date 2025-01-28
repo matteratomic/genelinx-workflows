@@ -29,15 +29,15 @@ export default function Sidebar() {
       <h2 className="uppercase text-xs font-semibold text-slate-500 mb-4 tracking-widest">Menu</h2>
       <ul className="space-y-2">
         <Link href="/dashboard/home" role="button"
-          className={`cursor-pointer ${isHome ? "bg-teal-50 text-teal-900 font-semibold" : "text-slate-600"} p-2 hover:bg-slate-50 rounded-md flex items-center`}>
+          className={`cursor-pointer ${isHome ? "bg-green-50 text-green-900 font-semibold" : "text-slate-600"} p-2 hover:bg-slate-50 rounded-md flex items-center`}>
           <LayoutDashboard className="w-4 h-4 mr-4" />
           Workflows
         </Link>
-        <Link role="button" className={`text-slate-600 p-2 hover:bg-slate-50 ${isBlocks ? "bg-teal-50 text-teal-900 font-semibold" : "text-slate-600"}  rounded-md flex items-center`} href="/dashboard/blocks">
+        <Link role="button" className={`text-slate-600 p-2 hover:bg-slate-50 ${isBlocks ? "bg-green-50 text-green-900 font-semibold" : "text-slate-600"}  rounded-md flex items-center`} href="/dashboard/blocks">
           <Grid2X2 className="w-4 h-4 mr-4" />
           Blocks
         </Link>
-        <Link role="button" className={`${isSettings ? "bg-teal-50 text-teal-900 font-semibold" : "text-slate-600"} p-2 hover:bg-slate-50 rounded-md flex items-center`} href="/dashboard/settings">
+        <Link role="button" className={`${isSettings ? "bg-green-50 text-green-900 font-semibold" : "text-slate-600"} p-2 hover:bg-slate-50 rounded-md flex items-center`} href="/dashboard/settings">
           <Settings className="w-4 h-4 mr-4" />
           Settings
         </Link>

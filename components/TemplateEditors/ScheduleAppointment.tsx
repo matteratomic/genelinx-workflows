@@ -6,7 +6,7 @@ import { Settings2, Save, Undo } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 
-const ConsultationBlock = ({ blockName, setBlockName }) => {
+const ConsultationBlock = ({ blockName, setBlockName, isWorkflowBlock }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [template, setTemplate] = useState({
@@ -20,6 +20,7 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
         title: 'Cancer',
         price: '€249',
         image: 'https://gene-linx.com/wp-content/uploads/2024/06/Image-217-1.png',
+        inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/cencer.png",
         items: [
           "I was diagnosed with cancer",
           "I have a family history of cancer",
@@ -32,6 +33,7 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
         title: 'Reproductive',
         price: '€249',
         image: 'https://gene-linx.com/wp-content/uploads/2024/06/2566956f-1c28-4b79-aa7c-d02a303949f1-scaled.jpg',
+        inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/health.png",
         items: [
           "I am planning a pregnancy and want to know my risks",
           "I have a history of stillbirths or miscarriages",
@@ -44,6 +46,7 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
         title: 'Proactive',
         price: '€249',
         image: 'https://gene-linx.com/wp-content/uploads/2024/06/da10fbd7-db1e-4dd8-83b6-acfe473b24d3-scaled-e1724788042727.jpg',
+        inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/pro.png",
         items: [
           "I am healthy and curious about genetic testing for preventive health",
           "I want to know my risk for common genetic diseases",
@@ -55,7 +58,8 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
         id: 'other',
         title: 'Other Indications',
         price: '€249',
-        image: 'https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d1-scaled-e1724787499961.jpg',
+        image: "https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d0-scaled-e1724787499961.jpg",
+        inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/other.png",
         items: [
           "I have a genetic disease that is not cancer",
           "I have a family history of a disease that could be genetic (not cancer)",
@@ -109,7 +113,7 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
         <ul className="text-sm text-primary grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {section.items.map((item, index) => (
             <li key={index} className="flex items-start bg-white gap-3 p-2">
-              <img className="w-8" src={`https://gene-linx.com/wp-content/uploads/2024/06/${section.id}.png`} />
+              <img className="w-8" src={section.inlineImage} />
               <span>{item}</span>
             </li>
           ))}
@@ -126,13 +130,13 @@ const ConsultationBlock = ({ blockName, setBlockName }) => {
     <div className="max-w-6xl mx-auto p-4 space-y-4">
       {/* Edit Controls */}
       <div className="flex justify-start space-x-2">
-        <Button
+        {!isWorkflowBlock && (<Button
           variant={isEditing ? "outline" : "default"}
           onClick={() => setIsEditing(!isEditing)}
         >
           <Settings2 className="w-4 h-4 mr-2" />
           {isEditing ? 'Editing Mode' : 'Edit Template'}
-        </Button>
+        </Button>)}
         {isEditing && (
           <>
             <Button onClick={handleSave}>

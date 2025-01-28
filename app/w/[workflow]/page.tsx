@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { use } from 'react'; // Import `use` for unwrapping promises
+import { use } from 'react';
 import { Progress } from '@/components/ui/progress';
 import OTPTemplateEditor from '@/components/TemplateEditors/OTP';
 import PaymentTemplateEditor from '@/components/TemplateEditors/Payment';
@@ -9,18 +9,23 @@ import FormBlock from '@/components/TemplateEditors/FormBlock';
 import {
   BookingConsultationTemplate,
   BookingTemplate,
+  CourseBlockTemplate,
   FamilyHistoryTemplate,
+  LandingPageTemplate,
   MedicalHistoryTemplate,
   OptionalQuestionnaireTemplate,
   PatientDetailsTemplate,
   ScheduleAppointmentTemplate,
   ScreeningQuestinnaireTemplate,
+  SubmissionResultTemplate,
 } from '@/components/TemplateEditors/constants';
 import BookConsultation from '@/components/TemplateEditors/BookConsultation';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Booking from '@/components/TemplateEditors/BookingForm';
 import ScheduleAppointment from '@/components/TemplateEditors/ScheduleAppointment';
+import LandingPage from '@/components/TemplateEditors/LandingPage';
+import CourseBlock from '@/components/Course';
+import SubmissionResult from '@/components/TemplateEditors/SubmissionResult';
 
 const blockComponents = {
   'OTP Code': {
@@ -40,6 +45,10 @@ const blockComponents = {
   'Family Details': {
     component: FormBlock,
     data: FamilyHistoryTemplate,
+  },
+  'Make a Course': {
+    component: CourseBlock,
+    data: CourseBlockTemplate
   },
   'Screening Questionnaire': {
     component: FormBlock,
@@ -61,7 +70,14 @@ const blockComponents = {
     component: ScheduleAppointment,
     data: ScheduleAppointmentTemplate,
   },
-
+  'Landing Page': {
+    component: LandingPage,
+    data: LandingPageTemplate
+  },
+  'Submission Result': {
+    component: SubmissionResult,
+    data: SubmissionResultTemplate
+  },
 };
 
 
@@ -134,16 +150,16 @@ export default function WorkflowPage({ params }) {
   const currentBlock = workflow.blocks[currentBlockIndex];
   const progress = ((currentBlockIndex + 1) / workflow.blocks.length) * 100;
 
-  const BlockComponent = blockComponents[currentBlock.title]?.component;
-  const defaultData = blockComponents[currentBlock.title]?.data;
+  // const BlockComponent = blockComponents[currentBlock?.title]?.component;
+  const BlockComponent = blockComponents[currentBlock?.title]?.component;
+  const defaultData = blockComponents[currentBlock?.title]?.data;
+
+  if (!BlockComponent) return <></>
 
   return (
     <div className="min-h-screen bg-background">
       <div className="fixed top-0 left-0 right-0 z-50">
         <Progress value={progress} className="h-1" />
-        <div className="absolute top-2 right-4 text-sm text-gray-500">
-          Press {keyBindings.previousBlock} for previous, {keyBindings.nextBlock} for next
-        </div>
       </div>
 
       <div className="min-h-screen pt-8 flex items-center justify-center">
@@ -163,23 +179,12 @@ export default function WorkflowPage({ params }) {
         )}
       </div>
 
-      {/* Optional: Visual navigation buttons */}
       <div className="fixed bottom-4 right-4 space-x-2">
-        <button
-          onClick={handlePrevious}
-          disabled={currentBlockIndex === 0}
-          className="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-        >
-          Previous ({keyBindings.previousBlock})
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentBlockIndex === workflow.blocks.length - 1}
-          className="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-        >
-          Next ({keyBindings.nextBlock})
-        </button>
+        <div className="text-sm text-gray-500">
+          Press {keyBindings.previousBlock} for previous, {keyBindings.nextBlock} for next
+        </div>
       </div>
+
     </div>
   );
 }

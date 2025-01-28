@@ -7,9 +7,10 @@ import { Card } from '@/components/ui/card';
 import OTPTemplateEditor from '@/components/TemplateEditors/OTP';
 import PaymentTemplateEditor from '@/components/TemplateEditors/Payment';
 import FormBlock from '@/components/TemplateEditors/FormBlock';
-import { BookingConsultationTemplate, FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScreeningQuestinnaireTemplate } from '@/components/TemplateEditors/constants';
+import { BookingConsultationTemplate, CourseBlockTemplate, FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScreeningQuestinnaireTemplate } from '@/components/TemplateEditors/constants';
 import BookConsultation from '@/components/TemplateEditors/BookConsultation';
 import { useRouter } from 'next/navigation';
+import CourseBlock from '@/components/Course';
 
 const blockComponents = {
   'OTP Code': { component: OTPTemplateEditor },
@@ -25,6 +26,10 @@ const blockComponents = {
   'Family Details': {
     component: FormBlock,
     data: FamilyHistoryTemplate
+  },
+  'Make a Course': {
+    component: CourseBlock,
+    data: CourseBlockTemplate
   },
   'Screening Questionnaire': {
     component: FormBlock,
@@ -87,7 +92,7 @@ export default function WorkflowViewer({ params }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f6f6] w-full">
+    <div className="min-h-screen bg-[#f6f6f6]">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

@@ -61,7 +61,7 @@ export default function SettingsPage() {
 
           <Button
             onClick={handleSave}
-            className="mt-6 bg-teal-800 text-white hover:bg-teal-700"
+            className="mt-6 bg-green-700 text-white hover:bg-green-800"
           >
             Save Changes
           </Button>

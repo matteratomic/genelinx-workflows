@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Edit, Settings, Share2 } from 'lucide-react';
+import { Edit, LayoutDashboard, Plus, Settings, Share2 } from 'lucide-react';
 import CreateWorkflowModal from '@/components/CreateWorkflowModal';
 import Link from 'next/link';
 import { generateWorkflowShareLink } from '@/utils/workflowLink';
@@ -34,7 +34,7 @@ export function WorkflowCard({ workflow, onEdit }) {
             {workflow.blocks.map((block) => (
               <span
                 key={block.id}
-                className="px-2 py-1 bg-teal-50 text-teal-700 rounded-md text-sm"
+                className="px-2 py-1 bg-green-50 text-green-700 rounded-md text-sm"
               >
                 {block.title}
               </span>
@@ -57,7 +57,7 @@ export function WorkflowCard({ workflow, onEdit }) {
             Share
           </Button>
           <Link href={generateWorkflowShareLink(workflow)}>
-            <Button className="text-white bg-teal-700 hover:bg-teal-600">
+            <Button className="text-white bg-green-700 hover:bg-green-600">
               Open
             </Button>
           </Link>
@@ -122,21 +122,20 @@ const Dashboard = () => {
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-teal-900">Dashboard</h1>
+            <h1 className="text-4xl font-bold text-green-900">Dashboard</h1>
             <p className="text-slate-600 mt-3">
               Manage your workflows and account settings from the dashboard
             </p>
           </div>
-          <Button
-            onClick={() => toggleModal()}
-            className="hover:bg-teal-700 bg-teal-800">
-            + Add new workflow
-          </Button>
+          {workflows.length ? <Button onClick={() => toggleModal()} className="mt-6 bg-green-700 text-white hover:bg-green-800">
+            <Plus className="w-4 h-4 mr-2" />
+            Add new workflow
+          </Button> : null}
         </header>
 
         {/* Main Content */}
-        <div className="mt-20">
-          <h2 className="text-xl font-semibold text-teal-900 mb-6">Workflows</h2>
+        <div className="">
+          <h2 className="text-xl font-semibold text-green-900 mb-6">Workflows</h2>
           {workflows.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-24">
               {workflows.map((workflow) => (
@@ -147,14 +146,18 @@ const Dashboard = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium text-gray-900">No workflows yet</h3>
-              <p className="mt-2 text-gray-500">Get started by creating your first workflow</p>
-              <Button
-                onClick={() => toggleModal()}
-                className="mt-4 hover:bg-teal-700 bg-teal-800">
-                + Add new workflow
-              </Button>
+            <div className="flex flex-col">
+              <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+                <LayoutDashboard strokeWidth={1} className="mx-auto w-32 h-32 text-gray-800" />
+                <div className="mt-4 text-xl font-medium text-gray-800">No workflows yet</div>
+                <div className="mt-1 font-medium text-gray-400 text-center w-1/3 mx-auto">
+                  You haven't created any workflows yet.
+                </div>
+                <Button onClick={() => toggleModal()} className="mt-6 bg-green-700 text-white hover:bg-green-800">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add new workflow
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -175,7 +178,7 @@ export default Dashboard;
 {/*         {workflow.blocks.map((block) => ( */ }
 {/*           <span */ }
 {/*             key={block.id} */ }
-{/*             className="px-2 py-1 bg-teal-50 text-teal-700 rounded-md text-sm" */ }
+{/*             className="px-2 py-1 bg-green-50 text-green-700 rounded-md text-sm" */ }
 {/*           > */ }
 {/*             {block.title} */ }
 {/*           </span> */ }
@@ -190,7 +193,7 @@ export default Dashboard;
 {/*         Edit */ }
 {/*       </Button> */ }
 {/*       <Link href={`/dashboard/${workflow.id}`}> */ }
-{/*         <Button className="text-white bg-teal-700 hover:bg-teal-600"> */ }
+{/*         <Button className="text-white bg-green-700 hover:bg-green-600"> */ }
 {/*           Open */ }
 {/*         </Button> */ }
 {/*       </Link> */ }

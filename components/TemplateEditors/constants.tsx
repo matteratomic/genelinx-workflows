@@ -755,6 +755,81 @@ export const BookingTemplate = {
   }
 }
 
+// export const ScheduleAppointmentTemplate = {
+//   title: "Book an initial consultation",
+//   subtitle: "Understand your risks, if genetic testing is right for you and which test might help you.",
+//   learnMoreText: "To learn more about your journey with GeneLinx,",
+//   learnMoreLinkText: "click here",
+//   sections: [
+//     {
+//       id: 'cancer',
+//       title: 'Cancer',
+//       price: '€249',
+//       image: 'https://gene-linx.com/wp-content/uploads/2024/06/Image-217-1.png',
+//       items: [
+//         "I was diagnosed with cancer",
+//         "I have a family history of cancer",
+//         "I need to be tested for a familial cancer genetic change",
+//         "I need guidance on selecting the right test"
+//       ]
+//     },
+//     {
+//       id: 'reproductive',
+//       title: 'Reproductive',
+//       price: '€249',
+//       image: 'https://gene-linx.com/wp-content/uploads/2024/06/2566956f-1c28-4b79-aa7c-d02a303949f1-scaled.jpg',
+//       items: [
+//         "I am planning a pregnancy and want to know my risks",
+//         "I have a history of stillbirths or miscarriages",
+//         "I want to understand genetic test options in pregnancy",
+//         "I have a family history of disease and want to know the risks to my future pregnancy"
+//       ]
+//     },
+//     {
+//       id: 'proactive',
+//       title: 'Proactive',
+//       price: '€249',
+//       image: 'https://gene-linx.com/wp-content/uploads/2024/06/da10fbd7-db1e-4dd8-83b6-acfe473b24d3-scaled-e1724788042727.jpg',
+//       items: [
+//         "I am healthy and curious about genetic testing for preventive health",
+//         "I want to know my risk for common genetic diseases",
+//         "I need guidance on the right preventive genetic test",
+//         "I have results from a genetic test and want to discuss my results"
+//       ]
+//     },
+//     {
+//       id: 'other',
+//       title: 'Other Indications',
+//       price: '€249',
+//       image: 'https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d1-scaled-e1724787499961.jpg',
+//       items: [
+//         "I have a genetic disease that is not cancer",
+//         "I have a family history of a disease that could be genetic (not cancer)",
+//         "There is a disease-causing genetic change in my family (not cancer)",
+//         "I want to discuss my previous test results (not cancer or proactive)"
+//       ]
+//     }
+//   ],
+//   faq: {
+//     title: "Frequently asked questions",
+//     questions: [
+//       {
+//         question: "What is genetic counselling and who provides this?",
+//         answer: "Genetic counselling is a healthcare service that provides information and support to people who have, or may be at risk for, genetic conditions. It is provided by certified genetic counsellors who have specialized training in medical genetics and counselling."
+//       },
+//       {
+//         question: "Who should have genetic counselling?",
+//         answer: "Genetic counselling may be beneficial for individuals who have a personal or family history of genetic conditions, are planning a pregnancy, have experienced multiple miscarriages, or are interested in understanding their genetic health risks."
+//       }
+//       // Add more FAQ items as needed
+//     ]
+//   },
+//   unsureSection: {
+//     title: "Unsure of which service to choose?",
+//     contactLink: "Contact us"
+//   }
+// }
+
 export const ScheduleAppointmentTemplate = {
   title: "Book an initial consultation",
   subtitle: "Understand your risks, if genetic testing is right for you and which test might help you.",
@@ -766,6 +841,7 @@ export const ScheduleAppointmentTemplate = {
       title: 'Cancer',
       price: '€249',
       image: 'https://gene-linx.com/wp-content/uploads/2024/06/Image-217-1.png',
+      inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/cencer.png",
       items: [
         "I was diagnosed with cancer",
         "I have a family history of cancer",
@@ -778,6 +854,7 @@ export const ScheduleAppointmentTemplate = {
       title: 'Reproductive',
       price: '€249',
       image: 'https://gene-linx.com/wp-content/uploads/2024/06/2566956f-1c28-4b79-aa7c-d02a303949f1-scaled.jpg',
+      inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/health.png",
       items: [
         "I am planning a pregnancy and want to know my risks",
         "I have a history of stillbirths or miscarriages",
@@ -790,6 +867,7 @@ export const ScheduleAppointmentTemplate = {
       title: 'Proactive',
       price: '€249',
       image: 'https://gene-linx.com/wp-content/uploads/2024/06/da10fbd7-db1e-4dd8-83b6-acfe473b24d3-scaled-e1724788042727.jpg',
+      inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/pro.png",
       items: [
         "I am healthy and curious about genetic testing for preventive health",
         "I want to know my risk for common genetic diseases",
@@ -801,7 +879,8 @@ export const ScheduleAppointmentTemplate = {
       id: 'other',
       title: 'Other Indications',
       price: '€249',
-      image: 'https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d1-scaled-e1724787499961.jpg',
+      image: "https://gene-linx.com/wp-content/uploads/2024/06/1d1e6d3e-a83c-4575-b458-e2583f9bf4d0-scaled-e1724787499961.jpg",
+      inlineImage: "https://gene-linx.com/wp-content/uploads/2024/06/other.png",
       items: [
         "I have a genetic disease that is not cancer",
         "I have a family history of a disease that could be genetic (not cancer)",
@@ -827,5 +906,130 @@ export const ScheduleAppointmentTemplate = {
   unsureSection: {
     title: "Unsure of which service to choose?",
     contactLink: "Contact us"
+  }
+}
+
+export const LandingPageTemplate = {
+  hero: {
+    title: "Access to Cascade Genetic Testing Study",
+    description: "You are being invited to take part in the Access to Cascade Genetic Testing (ACGT) research study to be carried out at St. James's Hospital in partnership with Trinity College Dublin by Assistant Professor Rosie O Shea, Principal Genetic Counsellor and Professor Karen Cadoo.",
+    buttonText: "Enroll Now",
+    buttonLink: "/otp",
+    image: "https://gene-linx.com/wp-content/uploads/2024/06/Image-195.png"
+  },
+  information: {
+    title: "Information about the study",
+    content: [
+      "Before you decide whether or not you wish to take part, you should read the information provided in the leaflet carefully and, if you wish, discuss it with your family, friends or GP (doctor). Take time to ask questions – don't feel rushed and don't feel under pressure to make a quick decision.",
+      "You should clearly understand the risks and benefits of taking part in this study so that you can make a decision that is right for you. This process is known as 'Informed Consent'.",
+      "You do not have to take part in this study. If you decide not to take part, it won't affect your future medical care.",
+      "You can change your mind about taking part in the study any time you like. Even if the study has started, you can still opt out. You don't have to give us a reason. If you do opt out, rest assured it won't affect the quality of treatment you get in the future.",
+      "If you wish to opt out, please contact Rosie O Shea, Principal Genetic Counsellor (Phone 01-4103759, Email: rososhea@stjames.ie) who will be able to organise this for you."
+    ],
+    buttons: {
+      primary: {
+        text: "Information Leaflet",
+        link: "https://gene-linx.com/wp-content/uploads/2024/10/Draft_Participant_Information_Leaflet-v4-23.08.24-Clean.pdf"
+      },
+      secondary: {
+        text: "Enroll Now",
+        link: "/otp"
+      }
+    }
+  }
+}
+
+export const CourseBlockTemplate = {
+  title: "Genetics and Hereditary Cancer",
+  subtitle: "Understanding genetic testing and hereditary cancer syndromes",
+  sections: [
+    {
+      id: "fundamentals",
+      title: "Fundamentals",
+      content: {
+        title: "Fundamentals of Genetics and Genetic Testing",
+        description: "Learn the basic principles of genetics, inheritance patterns, and the role of genetic testing in healthcare.",
+        topics: [
+          "DNA structure and function",
+          "Inheritance patterns",
+          "Types of genetic testing",
+          "Understanding test results"
+        ],
+        videoUrl: "https://www.youtube.com/embed/lMSIwbAJf1I"
+      }
+    },
+    {
+      id: "questions",
+      title: "Questions",
+      questions: [
+        {
+          text: "Knowing about inherited risk (passed down within a family) can affect choices about cancer treatments (for examples, medications or surgery).",
+          options: ["Agree", "Disagree"]
+        },
+        {
+          text: "People with an inherited risk for cancer (and their at-risk relatives) are more likely to develop more than one type of cancer",
+          options: ["Agree", "Disagree"]
+        }
+      ]
+    },
+    {
+      id: "proceed",
+      title: "Proceed to Testing",
+      question: "After reviewing the information provided would you like to proceed to testing?",
+      options: ["Yes", "No"]
+    }
+  ]
+}
+
+export const SubmissionResultTemplate = {
+  slides: [
+    {
+      id: 'success',
+      type: 'success',
+      title: 'Thank You!',
+      description: 'Thank you for participating in the study. The coordinator will be in touch about kit shipment.',
+      icon: 'CheckCircle',
+      primaryButtonText: 'Next',
+      secondaryButtonText: 'Previous',
+    },
+    {
+      id: 'booking-confirmation',
+      type: 'booking',
+      title: 'Booking Confirmation',
+      description: 'Your appointment has been confirmed',
+      showAppointmentDetails: true,
+      primaryButtonText: 'Next',
+      secondaryButtonText: 'Previous',
+    },
+    {
+      id: 'consent-form',
+      type: 'pdf',
+      title: 'Consent Form',
+      pdfUrl: '/consent.pdf',
+      primaryButtonText: 'Next',
+      secondaryButtonText: 'Previous',
+    },
+    {
+      id: 'summary-report',
+      type: 'summary',
+      title: 'Summary Report',
+      description: 'Here is your summary report',
+      primaryButtonText: 'Next',
+      secondaryButtonText: 'Previous',
+    },
+    {
+      id: 'summary-pdf',
+      type: 'pdf',
+      title: 'Summary PDF',
+      pdfUrl: '/summary.pdf',
+      primaryButtonText: 'Finish',
+      secondaryButtonText: 'Previous',
+    }
+  ],
+  styles: {
+    backgroundColor: 'white',
+    primaryColor: 'emerald-500',
+    maxWidth: '3xl',
+    borderRadius: 'lg',
   }
 }

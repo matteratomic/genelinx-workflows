@@ -76,7 +76,7 @@ const SmoothCarousel = ({ items }) => {
 }
 `}
       </style>
-      <div className={`w-full max-w-3xl mx-auto relative mt-8 ${currentIndex === 0 ? "overflow-hidden" : "border-2 border-emerald-600"} ${currentIndex && currentIndex!==2 && currentIndex !== 4 && "overflow-y-scroll"} rounded-lg h-screen`}>
+      <div className={`w-full max-w-3xl mx-auto relative mt-8 ${currentIndex === 0 ? "overflow-hidden" : "border-2 border-emerald-600"} ${currentIndex && currentIndex !== 2 && currentIndex !== 4 && "overflow-y-scroll"} rounded-lg h-screen`}>
         {/* Main carousel container */}
         <div className="overflow-x-hidden relative rounded-lg">
           <div

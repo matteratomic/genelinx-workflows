@@ -130,7 +130,8 @@ export default function Blocks() {
       </div>
     </div>
 
-    <div className={`${(tab !== 'templates' && !savedBlocks.length) ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}>
+    {/* <div className={`${(tab !== 'templates' && !savedBlocks.length) ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}> */}
+    <div className={`${(tab !== 'templates' && !savedBlocks.length) ? "flex" : "flex"} w-full gap-4 relative`}>
       {tab === 'templates' ?
         workflowBlocks.map((block, i) => {
           return <div

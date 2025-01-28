@@ -148,7 +148,8 @@ const FormContainer = ({ isWorkflowBlock }) => {
     return (
       <div className="mb-6">
         {steps.map((_, i) => {
-          return <><FormBlock
+          return <FormBlock
+            key={i}
             hidden={i !== currentStep}
             // data={BookingConsultationTemplate.steps[i].template}
             // data={BookingConsultationTemplate.steps[currentStep].template}
@@ -158,9 +159,6 @@ const FormContainer = ({ isWorkflowBlock }) => {
             isWorkflowBlock={isWorkflowBlock}
             onSave={() => setIsEditing(false)}
           />
-            {/* {currentStep} */}
-            {/* <pre>{JSON.stringify(steps[currentStep].title, null, 3)}</pre> */}
-          </>
         })}
       </div>
     );
@@ -193,7 +191,7 @@ const FormContainer = ({ isWorkflowBlock }) => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="w-full mb-auto p-6">
       <Card>
         <CardContent className="p-8">
           {isWorkflowBlock ? renderStepIndicator() : <DraggableSteps
