@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+// import { defaultSlideTypes as slideTypes } from './slideTypes';
 
 const defaultTemplate = {
   slides: [
@@ -28,10 +29,38 @@ const defaultTemplate = {
   },
 };
 
+const initialSlideTypes = {
+  success: {
+    name: 'Success Message',
+    fields: [
+      { name: 'title', type: 'text', label: 'Title', required: true },
+      { name: 'description', type: 'textarea', label: 'Description' },
+      { name: 'showIcon', type: 'boolean', label: 'Show Icon' },
+      { name: 'iconColor', type: 'color', label: 'Icon Color' }
+    ]
+  },
+  pdf: {
+    name: 'PDF Document',
+    fields: [
+      { name: 'title', type: 'text', label: 'Title' },
+      { name: 'pdfUrl', type: 'url', label: 'PDF URL', required: true },
+      { name: 'showToolbar', type: 'boolean', label: 'Show Toolbar' }
+    ]
+  },
+  html: {
+    name: 'Custom HTML',
+    fields: [
+      { name: 'title', type: 'text', label: 'Title' },
+      { name: 'htmlContent', type: 'html', label: 'HTML Content', required: true }
+    ]
+  }
+};
+
 const SuccessTemplateEditor = ({ data, onTemplateChange, isWorkflowBlock }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [template, setTemplate] = useState(data || defaultTemplate);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [slideTypes, setSlideTypes] = useState(initialSlideTypes);
+  const [editingSlideType, setEditingSlideType] = useState(null); const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   useEffect(() => {
     if (data) {
@@ -75,22 +104,102 @@ const SuccessTemplateEditor = ({ data, onTemplateChange, isWorkflowBlock }) => {
     }
   };
 
+  // const renderSlide = (slide) => {
+  //   switch (slide.type) {
+  //     case 'success':
+  //       return (
+  //         <Card className="w-full max-w-md mx-auto mt-24">
+  //           <CardHeader className="text-center">
+  //             <CheckCircle size={40} className={`mx-auto text-${template.styles.primaryColor}`} />
+  //             <CardTitle className="mt-4 text-2xl font-medium">{slide.title}</CardTitle>
+  //           </CardHeader>
+  //           <CardContent className="text-center">{slide.description}</CardContent>
+  //         </Card>
+  //       );
+  //     case 'pdf':
+  //       return <embed className="w-full h-screen" src={slide.pdfUrl} type="application/pdf" />;
+  //     default:
+  //       return <p>Unsupported slide type</p>;
+  //   }
+  // };
+  //
+
   const renderSlide = (slide) => {
+    const slideType = slideTypes[slide.type];
+    if (!slideType) return null;
+
     switch (slide.type) {
       case 'success':
         return (
-          <Card className="w-full max-w-md mx-auto mt-24">
-            <CardHeader className="text-center">
-              <CheckCircle size={40} className={`mx-auto text-${template.styles.primaryColor}`} />
-              <CardTitle className="mt-4 text-2xl font-medium">{slide.title}</CardTitle>
+          <Card className="h-72 w-full max-w-md mx-auto mt-24">
+            <CardHeader className="flex justify-center py-6">
+              {slide.showIcon && (
+                <div
+                  className="mx-auto p-3 w-16 h-16 flex items-center justify-center rounded-full"
+                  style={{ backgroundColor: slide.iconColor || '#4CAF50' }}
+                >
+                  <CheckCircle size={32} color="white" />
+                </div>
+              )}
             </CardHeader>
-            <CardContent className="text-center">{slide.description}</CardContent>
+            <CardContent className="text-center">
+              <CardTitle className="text-2xl font-medium">{slide.title}</CardTitle>
+              <p className="mt-4">{slide.description}</p>
+            </CardContent>
           </Card>
         );
+
       case 'pdf':
-        return <embed className="w-full h-screen" src={slide.pdfUrl} type="application/pdf" />;
+        return (
+          <div className="w-full h-[600px]">
+            <embed
+              src={`${slide.pdfUrl}${slide.showToolbar ? '' : '#toolbar=0&navpanes=0&scrollbar=0'}`}
+              width="100%"
+              height="100%"
+              type="application/pdf"
+            />
+          </div>
+        );
+
+      case 'html':
+        return (
+          <div className="w-full max-w-3xl mx-auto">
+            <h2 className="text-2xl font-medium mb-4">{slide.title}</h2>
+            <div dangerouslySetInnerHTML={{ __html: slide.htmlContent }} />
+          </div>
+        );
+
       default:
-        return <p>Unsupported slide type</p>;
+        return (
+          <Card className="w-full max-w-3xl mx-auto p-6">
+            <CardHeader>
+              <CardTitle>{slide.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {slideType.fields.map((field, index) => {
+                switch (field.type) {
+                  case 'html':
+                    return (
+                      <div key={index} dangerouslySetInnerHTML={{ __html: slide[field.name] }} />
+                    );
+                  case 'textarea':
+                  case 'text':
+                    return <p key={index}>{slide[field.name]}</p>;
+                  case 'image':
+                    return <img key={index} src={slide[field.name]} alt={field.label} />;
+                  case 'boolean':
+                    return slide[field.name] ? (
+                      <div key={index} className="text-green-500">Enabled</div>
+                    ) : (
+                      <div key={index} className="text-red-500">Disabled</div>
+                    );
+                  default:
+                    return null;
+                }
+              })}
+            </CardContent>
+          </Card>
+        );
     }
   };
 

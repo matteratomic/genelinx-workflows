@@ -663,8 +663,8 @@ export const BookingConsultationTemplate = {
       id: "welcome",
       title: "Welcome",
       template: {
-        title: "Welcome",
-        subtitle: "",
+        title: "Let's prepare you for your GeneLinx Genetic Consultation",
+        subtitle: "This form includes questions about your health, your family members' health and any genetic testing you might have previously had. So please do have as much of this information as possible on hand before starting to fill out the form. The more specific information we have, the better our genetic experts can prepare for your session. You will need about 10-15 minutes to complete this form.",
         questions: [
           {
             id: "booking_id",
@@ -1032,4 +1032,52 @@ export const SubmissionResultTemplate = {
     maxWidth: '3xl',
     borderRadius: 'lg',
   }
+}
+
+export const ConsentFormTemplate = {
+  title: 'Access to Cascade Genetic Testing (AGCT) Study Consent Form',
+  logos: ['/logos.png'],
+  studyInfo: [
+    {
+      label: "Principal investigator's name:",
+      value: "Rosie O Shea"
+    },
+    {
+      label: "Principal investigator's title:",
+      value: "Principal Genetic Counsellor, Cancer Genetic Service and Assistant Professor, Trinity College Dublin"
+    },
+    {
+      label: "Telephone number of principal investigator:",
+      value: "+353 1 4103759"
+    },
+    {
+      label: "Consultant co-investigator's name:",
+      value: "Professor Karen Cadoo"
+    },
+    {
+      label: "Consultant co-investigator's title:",
+      value: "Consultant Oncologist and Cancer Geneticist, Clinical Lead of Cancer Genetic Service"
+    },
+    {
+      label: "Data Controller's/joint Controller's Identity:",
+      value: [
+        "St James Hospital",
+        "Dublin, Ireland"
+      ]
+    }
+  ],
+  generalQuestions: [
+    "I confirm that I read and understood the Information Leaflet for the above study and have been given a copy to keep.",
+    "The project information has been explained and I have the opportunity to discuss and ask questions about the study.",
+    "I understand that the study is entirely voluntary and I can stop taking part in this study at any time without giving a reason. I understand that not taking part will not affect my future medical care.",
+    "I understand that my medical notes and records may be looked at by the study team at St James Hospital where it is relevant to do research. I agree that these individuals can access my medical records. I understand that all information will be kept private and confidential.",
+    "I understand the data related to the study will be processed by GeneLinx for the research to be carried out",
+    "I understand that I will not be paid for taking part in the study.",
+    "I know how to contact the research team if I need to",
+    "I agree to be contacted by researchers by email and telephone as part of this study",
+    "I consent to take part in this research study"
+  ],
+  dataProtectionQuestions: [
+    "I give my explicit consent to have my data processed as part of this research study"
+  ]
 }

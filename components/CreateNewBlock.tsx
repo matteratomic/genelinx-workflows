@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import OTPTemplateEditor from './TemplateEditors/OTP';
 import PaymentTemplateEditor from './TemplateEditors/Payment';
 import FormBlock from './TemplateEditors/FormBlock';
-import { BookingConsultationTemplate, BookingTemplate, CourseBlockTemplate, FamilyHistoryTemplate, LandingPageTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScheduleAppointmentTemplate, ScreeningQuestinnaireTemplate, SubmissionResultTemplate } from './TemplateEditors/constants';
+import { BookingConsultationTemplate, BookingTemplate, ConsentFormTemplate, CourseBlockTemplate, FamilyHistoryTemplate, LandingPageTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScheduleAppointmentTemplate, ScreeningQuestinnaireTemplate, SubmissionResultTemplate } from './TemplateEditors/constants';
 import BookConsultation from './TemplateEditors/BookConsultation';
 import ScheduleAppointment from './TemplateEditors/ScheduleAppointment';
 import Booking from './TemplateEditors/BookingForm';
 import LandingPage from './TemplateEditors/LandingPage';
 import CourseBlock from './Course';
 import SubmissionResult from './TemplateEditors/SubmissionResult';
+import ConsentForm from './TemplateEditors/ConsentForm';
 
 const templateMap = {
   'OTP Code': { template: OTPTemplateEditor },
@@ -59,6 +60,10 @@ const templateMap = {
   'Submission Result': {
     template: SubmissionResult,
     data: SubmissionResultTemplate
+  },
+  'Consent Form': {
+    template: ConsentForm,
+    data: ConsentFormTemplate
   },
 }
 

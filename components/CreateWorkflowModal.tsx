@@ -32,10 +32,11 @@ const workflowBlocks: WorkflowBlock[] = [
   { id: 7, title: 'Make a Course', description: "Creates a Course block" },
   { id: 8, title: 'Screening Questionnaire', description: "Creates a questionnaire block" },
   { id: 9, title: 'Optional Questionnaire', description: "Creates a optional questionnaire block" },
-  { id: 10, title: 'Consultation Form', description: "Creates a consultation block" },
+  // { id: 10, title: 'Consultation Form', description: "Creates a consultation block" },
   { id: 11, title: 'Schedule Appointment', description: "Creates a schedule appointment block" },
   { id: 12, title: 'Consultation Form', description: "Creates a consultation form block" },
   { id: 15, title: 'Submission Result', description: "Creates a submission result block" },
+  { id: 16, title: 'Consent Form', description: "Creates a consent form block" },
   // { id: 13, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 

@@ -9,6 +9,7 @@ import FormBlock from '@/components/TemplateEditors/FormBlock';
 import {
   BookingConsultationTemplate,
   BookingTemplate,
+  ConsentFormTemplate,
   CourseBlockTemplate,
   FamilyHistoryTemplate,
   LandingPageTemplate,
@@ -26,6 +27,7 @@ import ScheduleAppointment from '@/components/TemplateEditors/ScheduleAppointmen
 import LandingPage from '@/components/TemplateEditors/LandingPage';
 import CourseBlock from '@/components/Course';
 import SubmissionResult from '@/components/TemplateEditors/SubmissionResult';
+import ConsentForm from '@/components/ConsentForm';
 
 const blockComponents = {
   'OTP Code': {
@@ -77,6 +79,10 @@ const blockComponents = {
   'Submission Result': {
     component: SubmissionResult,
     data: SubmissionResultTemplate
+  },
+  'Consent Form': {
+    component: ConsentForm,
+    data: ConsentFormTemplate
   },
 };
 

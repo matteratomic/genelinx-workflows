@@ -29,6 +29,7 @@ const workflowBlocks = [
   { id: 11, title: 'Schedule Appointment', description: "Creates a schedule appointment block" },
   { id: 12, title: 'Consultation Form', description: "Creates a consultation form block" },
   { id: 14, title: 'Submission Result', description: "Creates a submission result block" },
+  { id: 15, title: 'Consent Form', description: "Creates a consent form block" },
   // { id: 13, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 
