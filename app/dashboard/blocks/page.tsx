@@ -1,8 +1,10 @@
 'use client'
 
 import CreateNewBlock from "@/components/CreateNewBlock";
+import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
-import { Cuboid, Eye, Grid2X2, Plus } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { Cuboid, Eye, Grid2X2, Plus, Trash } from "lucide-react";
 import { useState, useEffect } from "react";
 
 // Type for a saved block
@@ -10,8 +12,10 @@ interface SavedBlock {
   id: string;
   name: string;
   type: string;
+  description: string;
   template: any;
-  createdAt: Date;
+  created_at: Date;
+  custom: boolean;
 }
 
 const workflowBlocks = [
@@ -33,13 +37,13 @@ const workflowBlocks = [
   // { id: 13, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 
-const Block = ({ block, onEdit }: { block: SavedBlock; onEdit: () => void }) => {
+const Block = ({ index, block, onEdit, onDelete }: { index: number, block: SavedBlock; onEdit: () => void, onDelete: () => void }) => {
   return <div className="px-4 flex items-center justify-between w-full bg-white h-20 rounded-md shadow-md">
     <div className="flex items-center justify-between space-x-4">
       <div
         style={{ backgroundImage: "url(/ellipse.png)" }}
         className="w-9 h-9 rounded-full bg-cover bg-center flex items-center justify-center text-white font-semibold">
-        <p>{block.id}</p>
+        <p>{index}</p>
       </div>
       <div>
         <p className="font-semibold">{block.name}</p>
@@ -48,30 +52,36 @@ const Block = ({ block, onEdit }: { block: SavedBlock; onEdit: () => void }) => 
     </div>
     <div className="flex items-center justify-center space-x-4">
       <Button size="lg" type="button" onClick={onEdit}>Edit</Button>
-      <Eye />
+      <Button
+        onClick={() => {
+          const response = window.confirm('Would you like to delete this block?')
+          response && onDelete();
+        }}
+        className="bg-white hover:bg-white" size="icon">
+        <Trash
+          className="text-red-500 w-4 h-4" />
+      </Button>
     </div>
   </div>
 }
 
 export default function Blocks() {
+  const [loading, setLoading] = useState(false)
   const [tab, setTab] = useState('templates')
   const [createBlockDialogOpen, setCreateBlockDialogOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState('')
   const [savedBlocks, setSavedBlocks] = useState<SavedBlock[]>([])
   const [selectedBlock, setSelectedBlock] = useState<SavedBlock | null>(null)
 
-  // Load saved blocks from localStorage on mount
-  useEffect(() => {
-    const loadedBlocks = localStorage.getItem('savedBlocks')
-    if (loadedBlocks) {
-      setSavedBlocks(JSON.parse(loadedBlocks))
-    }
-  }, [])
+  const supabase = createClient()
 
-  // Save blocks to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('savedBlocks', JSON.stringify(savedBlocks))
-  }, [savedBlocks])
+    const loadBlocks = async () => {
+      const blocks = await listBlocks()
+      setSavedBlocks(blocks)
+    }
+    loadBlocks()
+  }, [])
 
   const toggleModal = () => {
     setCreateBlockDialogOpen(!createBlockDialogOpen)
@@ -80,33 +90,113 @@ export default function Blocks() {
     }
   }
 
-  const handleSaveBlock = (blockName: string, template: any) => {
-    if (selectedBlock) {
-      // Update existing block
-      setSavedBlocks(blocks => blocks.map(block =>
-        block.id === selectedBlock.id
-          ? { ...block, name: blockName, template }
-          : block
-      ))
-    } else {
-      // Create new block
-      const newBlock: SavedBlock = {
-        id: (savedBlocks.length + 1).toString(),
-        name: blockName,
-        type: selectedTemplate,
-        template,
-        createdAt: new Date()
-      }
-      setSavedBlocks([...savedBlocks, newBlock])
+  const createBlock = async (block: Omit<SavedBlock, 'id' | 'createdAt'>) => {
+    const { data, error } = await supabase
+      .from('blocks')
+      .insert({
+        name: block.name,
+        type: block.type,
+        template: block.template,
+        custom: true
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  const updateBlock = async (block: SavedBlock) => {
+    const { data, error } = await supabase
+      .from('blocks')
+      .update({
+        name: block.name,
+        type: block.type,
+        template: block.template
+      })
+      .eq('id', block.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  const deleteBlock = async (id: string) => {
+    const { error } = await supabase
+      .from('blocks')
+      .delete()
+      .eq('id', id);
+
+    setSavedBlocks(currentSavedBlocks => {
+      return currentSavedBlocks.filter(b => b.id !== id);
+    })
+    setLoading(false)
+    if (error) throw error;
+  }
+
+  const listBlocks = async (type?: string) => {
+    setLoading(true)
+    let query = supabase
+      .from('blocks')
+      .select()
+      .order('created_at', { ascending: false });
+
+    if (type) {
+      query = query.eq('type', type);
     }
-    setTab('saved')
-    toggleModal()
+
+    const { data, error } = await query;
+    setSavedBlocks(data)
+    setLoading(false)
+    if (error) throw error;
+    return data;
+  }
+
+  const handleSaveBlock = async (blockName: string, template: any) => {
+    setLoading(true)
+    try {
+      if (selectedBlock) {
+        // console.log('calling handleSaveBlock update')
+        // Update existing block
+        setSavedBlocks(blocks => blocks.map(block =>
+          block.id === selectedBlock.id
+            ? { ...block, name: blockName, template }
+            : block
+        ))
+        await updateBlock({ ...selectedBlock, name: blockName, template })
+      } else {
+        // Create new block
+        // console.log('calling handleSaveBlock saving')
+        const newBlock: SavedBlock = {
+          id: (savedBlocks.length + 1).toString(),
+          name: blockName,
+          type: selectedTemplate,
+          template,
+          custom: true,
+          created_at: new Date(),
+        }
+        setSavedBlocks([...savedBlocks, newBlock])
+        await createBlock(newBlock)
+      }
+      setTab('saved')
+      toggleModal()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleEditBlock = (block: SavedBlock) => {
     setSelectedBlock(block)
     setSelectedTemplate(block.type)
     setCreateBlockDialogOpen(true)
+  }
+
+  const handleDeleteBlock = async (id: string) => {
+    setLoading(true)
+    await deleteBlock(id)
   }
 
   return <div className="min-h-screen p-8 bg-[#f6f6f6] w-full">
@@ -131,7 +221,8 @@ export default function Blocks() {
       </div>
     </div>
 
-    <div className={`${(tab !== 'templates' && !savedBlocks.length) ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}>
+    {/* <div className={`${(tab !== 'templates' && !savedBlocks.length) ? "flex" : "grid grid-cols-3"} w-full bg-green-500 gap-4 relative`}> */}
+    <div className={`${(tab !== 'templates') ? "flex" : "grid grid-cols-3"} w-full gap-4 relative`}>
       {tab === 'templates' ?
         workflowBlocks.map((block, i) => {
           return <div
@@ -157,12 +248,14 @@ export default function Blocks() {
         })
         :
         savedBlocks.length ?
-          <div className="flex flex-col space-y-6 w-full">
-            {savedBlocks.map((block) => (
+          <div className="flex flex-1 flex-col space-y-6 w-full">
+            {savedBlocks.map((block, i) => (
               <Block
+                index={i + 1}
                 key={block.id}
                 block={block}
                 onEdit={() => handleEditBlock(block)}
+                onDelete={() => handleDeleteBlock(block.id)}
               />
             ))}
           </div>
@@ -173,10 +266,10 @@ export default function Blocks() {
             <div className="mt-1 font-medium text-gray-400 w-96 text-center">
               To get started, create and save a custom block from the templates provided
             </div>
-            <Button onClick={toggleModal} className="mt-6 bg-green-700 text-white hover:bg-green-800">
-              <Plus className="w-4 h-4 mr-2" />
-              Add new block
-            </Button>
+            {/* <Button onClick={toggleModal} className="mt-6 bg-green-700 text-white hover:bg-green-800"> */}
+            {/*   <Plus className="w-4 h-4 mr-2" /> */}
+            {/*   Add new block */}
+            {/* </Button> */}
           </div>
       }
     </div>
@@ -190,5 +283,6 @@ export default function Blocks() {
         existingBlock={selectedBlock}
       />
     )}
+    {loading ? <Loader /> : null}
   </div>
 }

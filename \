@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { use } from 'react';
 import { Progress } from '@/components/ui/progress';
@@ -14,9 +15,7 @@ import {
   LandingPageTemplate,
   MedicalHistoryTemplate,
   OptionalQuestionnaireTemplate,
-  OTPTemplate,
   PatientDetailsTemplate,
-  PaymentTemplate,
   ScheduleAppointmentTemplate,
   ScreeningQuestinnaireTemplate,
   SubmissionResultTemplate,
@@ -28,18 +27,14 @@ import ScheduleAppointment from '@/components/TemplateEditors/ScheduleAppointmen
 import LandingPage from '@/components/TemplateEditors/LandingPage';
 import CourseBlock from '@/components/Course';
 import SubmissionResult from '@/components/TemplateEditors/SubmissionResult';
-import { createClient } from '@/utils/supabase/client';
-import Loader from '@/components/Loader';
-import ConsentForm from '@/components/TemplateEditors/ConsentForm';
+import ConsentForm from '@/components/ConsentForm';
 
 const blockComponents = {
   'OTP Code': {
-    component: OTPTemplateEditor,
-    data: OTPTemplate,
+    component: OTPTemplateEditor
   },
   'Payment Request': {
-    component: PaymentTemplateEditor,
-    data: PaymentTemplate,
+    component: PaymentTemplateEditor
   },
   'Patient Details': {
     component: FormBlock,
@@ -101,25 +96,22 @@ export default function WorkflowPage({ params }) {
     previousBlock: 'j',
     nextBlock: 'k'
   });
-  const [loading, setLoading] = useState(false)
 
-  const supabase = createClient()
-
-
-  const handlePrevious = () => {
-    if (currentBlockIndex > 0) {
-      setCurrentBlockIndex(prev => prev - 1);
-      toast.info('Navigated to previous block');
+  useEffect(() => {
+    // Load workflow
+    try {
+      const decodedWorkflow = JSON.parse(decodeURIComponent(unwrappedParams.workflow));
+      setWorkflow(decodedWorkflow);
+    } catch (e) {
+      console.error('Failed to decode workflow:', e);
     }
-  };
 
-  const handleNext = () => {
-    if (currentBlockIndex < workflow?.blocks.length - 1) {
-      setCurrentBlockIndex(prev => prev + 1);
-      toast.info('Navigated to next block');
+    // Load key bindings
+    const savedBindings = localStorage.getItem('keyBindings');
+    if (savedBindings) {
+      setKeyBindings(JSON.parse(savedBindings));
     }
-  };
-
+  }, [unwrappedParams.workflow]);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -141,57 +133,21 @@ export default function WorkflowPage({ params }) {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [keyBindings, currentBlockIndex, handleNext, handlePrevious]);
+  }, [keyBindings, currentBlockIndex]);
 
-  useEffect(() => {
-
-    const loadBlockData = async (id: string) => {
-      const { data } = await supabase.from('blocks').select('template').eq('id', id).single()
-      // console.log('this is the template data', data)
-      return data?.template
+  const handlePrevious = () => {
+    if (currentBlockIndex > 0) {
+      setCurrentBlockIndex(prev => prev - 1);
+      toast.info('Navigated to previous block');
     }
+  };
 
-    const setBlockData = async (workflows: { id: string, blocks: any[], name: string }) => {
-      const workflowsWithData = await Promise.all(workflows.blocks.map(async (b) => {
-        if (b.custom) {
-          const data = await loadBlockData(b.id)
-          // console.log('This is the data for the block', data)
-          return { ...b, type: b.type, data }
-        }
-        return b
-      }))
-
-
-      console.log('CHECK THIS OUT', workflowsWithData)
-
-      setWorkflow({
-        ...workflows,
-        blocks: workflowsWithData
-      });
-      setLoading(false)
+  const handleNext = () => {
+    if (currentBlockIndex < workflow?.blocks.length - 1) {
+      setCurrentBlockIndex(prev => prev + 1);
+      toast.info('Navigated to next block');
     }
-
-    // loadBlockData()
-    // Load workflow
-    try {
-      setLoading(true)
-      const decodedWorkflow = JSON.parse(decodeURIComponent(unwrappedParams.workflow));
-      console.log('This is the decoded workflow', decodedWorkflow)
-      // setWorkflow(decodedWorkflow);
-      setBlockData(decodedWorkflow)
-    } catch (e) {
-      setLoading(false)
-      console.error('Failed to decode workflow:', e);
-    }
-
-    // Load key bindings
-    const savedBindings = localStorage.getItem('keyBindings');
-    if (savedBindings) {
-      setKeyBindings(JSON.parse(savedBindings));
-    }
-  }, [unwrappedParams.workflow,]);
-
-
+  };
 
   if (!workflow) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>;
@@ -200,23 +156,19 @@ export default function WorkflowPage({ params }) {
   const currentBlock = workflow.blocks[currentBlockIndex];
   const progress = ((currentBlockIndex + 1) / workflow.blocks.length) * 100;
 
+  // const BlockComponent = blockComponents[currentBlock?.title]?.component;
+  const BlockComponent = blockComponents[currentBlock?.title]?.component;
   // const BlockComponent = blockComponents[currentBlock?.type]?.component;
-  const isCustomBlock = currentBlock?.custom
-  const BlockComponent = blockComponents[isCustomBlock ? currentBlock?.type : currentBlock.title]?.component;
-  const defaultData = isCustomBlock ? currentBlock.data : blockComponents[currentBlock?.title]?.data;
+  const defaultData = blockComponents[currentBlock?.title]?.data;
 
-  if (!BlockComponent) return <><div>{JSON.stringify(workflow, null, 3)}</div></>
+  if (!BlockComponent) return <></>
 
   return (
     <div className="min-h-screen bg-background">
       <div className="fixed top-0 left-0 right-0 z-50">
         <Progress value={progress} className="h-1" />
       </div>
-      {/* <div className="fixed inset-0 bg-red-100 top-0 z-10 flex items-center justify-center"> */}
-      {/*   <div> */}
-      {/*     {JSON.stringify(currentBlock, null, 3)} */}
-      {/*   </div> */}
-      {/* </div> */}
+
       <div className="min-h-screen pt-8 flex items-center justify-center">
         {BlockComponent && (
           <BlockComponent
@@ -239,7 +191,7 @@ export default function WorkflowPage({ params }) {
           Press {keyBindings.previousBlock} for previous, {keyBindings.nextBlock} for next
         </div>
       </div>
-      {loading ? <Loader /> : null}
+
     </div>
   );
 }

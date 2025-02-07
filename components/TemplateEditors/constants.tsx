@@ -9,37 +9,66 @@ export const OTPTemplate = {
   placeholderText: 'Enter your email'
 }
 
+export const PaymentTemplate = {
+  companyName: 'GeneLinx GmbH',
+  pageTitle: 'Appointment Booking',
+  amountLabel: 'Amount',
+  referencePrefix: 'Pay For Appointment',
+  referenceFormat: 'GL-000466',
+  amount: '249,00',
+  currency: '€',
+  discountLabel: 'Discount Code',
+  discountButtonText: 'Apply',
+  totalLabel: 'Total',
+  paymentSectionTitle: 'Payment Information',
+  paymentMethods: {
+    card: { enabled: true, label: 'Card' },
+    ideal: { enabled: true, label: 'iDEAL' },
+    klarna: { enabled: true, label: 'Klarna' }
+  },
+  cardFields: {
+    cardNumber: { placeholder: 'Card Number', showAutofill: true },
+    expiry: { placeholder: 'MM / YY' },
+    cvv: { placeholder: 'CVV' }
+  },
+  payButtonText: 'Pay Now',
+  colors: {
+    primary: 'emerald',
+    headerBg: 'emerald-50'
+  }
+}
+
 export const PatientDetailsTemplate = {
   title: "Patient Details",
   subtitle: "Please enter your personal and medical information.",
   questions: [
-    {
-      id: "name_group",
-      type: "group",
-      questions: [
-        {
-          id: "first_name",
-          type: "text",
-          question: "First Name",
-          required: true,
-          placeholder: "First Name"
-        },
-        {
-          id: "middle_name",
-          type: "text",
-          question: "Middle Name",
-          required: false,
-          placeholder: "Middle Name"
-        },
-        {
-          id: "last_name",
-          type: "text",
-          question: "Last Name",
-          required: true,
-          placeholder: "Last Name"
-        }
-      ]
-    },
+    // {
+    //   id: "name_group",
+    //   type: "group",
+    //   questions: [
+    //     {
+    //       id: "first_name",
+    //       type: "text",
+    //       question: "First Name",
+    //       required: true,
+    //       placeholder: "First Name"
+    //     },
+    //     {
+    //       id: "middle_name",
+    //       type: "text",
+    //       question: "Middle Name",
+    //       required: false,
+    //       placeholder: "Middle Name"
+    //     },
+    //     {
+    //       id: "last_name",
+    //       type: "text",
+    //       question: "Last Name",
+    //       required: true,
+    //       placeholder: "Last Name"
+    //     }
+    //   ]
+    // },
     {
       id: "date_of_birth",
       type: "date",
@@ -127,39 +156,38 @@ export const PatientDetailsTemplate = {
       required: true,
       options: ["Yes", "No", "Don't know"]
     },
-    {
-      id: "relative_group",
-      type: "group",
-      questions: [
-        {
-          id: "relationship",
-          type: "text",
-          question: "Relationship to you",
-          required: true,
-          placeholder: "Relationship to you"
-        },
-        {
-          id: "relative_first_name",
-          type: "text",
-          question: "First Name",
-          required: true,
-          placeholder: "Relative first name"
-        },
-        {
-          id: "relative_last_name",
-          type: "text",
-          question: "Last Name",
-          required: true,
-          placeholder: "Relative last name"
-        },
-        {
-          id: "relative_dob",
-          type: "date",
-          question: "Date of Birth of Relative",
-          required: true
-        }
-      ]
-    },
+    // { id: "relative_group",
+    //   type: "group",
+    //   questions: [
+    //     {
+    //       id: "relationship",
+    //       type: "text",
+    //       question: "Relationship to you",
+    //       required: true,
+    //       placeholder: "Relationship to you"
+    //     },
+    //     {
+    //       id: "relative_first_name",
+    //       type: "text",
+    //       question: "First Name",
+    //       required: true,
+    //       placeholder: "Relative first name"
+    //     },
+    //     {
+    //       id: "relative_last_name",
+    //       type: "text",
+    //       question: "Last Name",
+    //       required: true,
+    //       placeholder: "Relative last name"
+    //     },
+    //     {
+    //       id: "relative_dob",
+    //       type: "date",
+    //       question: "Date of Birth of Relative",
+    //       required: true
+    //     }
+    //   ]
+    // },
     {
       id: "booking_id",
       type: "text",
@@ -182,24 +210,23 @@ export const PatientDetailsTemplate = {
 export const MedicalHistoryTemplate = {
   title: "Medical History",
   subtitle: "Please enter your personal and medical information.",
-
   questions: [
-    {
-      id: "measurements",
-      type: "measurements",
-      fields: {
-        weight: {
-          label: "Current Weight",
-          placeholder: "Your current weight",
-          example: "e.g. 58.5 Kgs"
-        },
-        height: {
-          label: "Current Height",
-          placeholder: "Your current height",
-          example: "e.g. 165 Cms"
-        }
-      }
-    },
+    // {
+    //   id: "measurements",
+    //   type: "measurements",
+    //   fields: {
+    //     weight: {
+    //       label: "Current Weight",
+    //       placeholder: "Your current weight",
+    //       example: "e.g. 58.5 Kgs"
+    //     },
+    //     height: {
+    //       label: "Current Height",
+    //       placeholder: "Your current height",
+    //       example: "e.g. 165 Cms"
+    //     }
+    //   }
+    // },
     {
       id: "transplant",
       type: "radio",
@@ -660,46 +687,29 @@ export const BookingConsultationTemplate = {
   contactInfo: "If you have any questions please do not hesitate to contact us at appointments@gene-linx.com with your last name and booking ID.",
   steps: [
     {
-      id: "welcome",
-      title: "Welcome",
-      template: {
-        title: "Let's prepare you for your GeneLinx Genetic Consultation",
-        subtitle: "This form includes questions about your health, your family members' health and any genetic testing you might have previously had. So please do have as much of this information as possible on hand before starting to fill out the form. The more specific information we have, the better our genetic experts can prepare for your session. You will need about 10-15 minutes to complete this form.",
-        questions: [
-          {
-            id: "booking_id",
-            type: "text",
-            question: "Booking ID",
-            required: true,
-            placeholder: "e.g. GL-xxxxxx"
-          }
-        ]
-      }
-    },
-    {
       id: "patient_details",
       title: "Patient Details",
-      template: PatientDetailsTemplate // Your existing patient details template
+      template: PatientDetailsTemplate
     },
     {
       id: "medical_history",
       title: "Medical History",
-      template: MedicalHistoryTemplate // Your existing medical history template
+      template: MedicalHistoryTemplate
     },
     {
       id: "family_details",
       title: "Family Details",
-      template: FamilyHistoryTemplate// Placeholder for family details template
+      template: FamilyHistoryTemplate
     },
     {
       id: "Screening_questionnaire",
       title: "Screening Questionnaire",
-      template: ScreeningQuestinnaireTemplate // Your existing screening template
+      template: ScreeningQuestinnaireTemplate
     },
     {
       id: "optional_questionnaire",
       title: "Optional Questionnaire",
-      template: OptionalQuestionnaireTemplate // Your existing screening template
+      template: OptionalQuestionnaireTemplate
     },
   ]
 };

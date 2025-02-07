@@ -8,50 +8,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CourseBlockTemplate } from './TemplateEditors/constants';
 
-const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkflowBlock }) => {
+const CourseBlock = ({
+  data,
+  blockName,
+  setBlockName,
+  isWorkflowBlock,
+  onTemplateChange,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [template, setTemplate] = useState(data || {
-    title: "Genetics and Hereditary Cancer",
-    subtitle: "Understanding genetic testing and hereditary cancer syndromes",
-    sections: [
-      {
-        id: "fundamentals",
-        title: "Fundamentals",
-        content: {
-          title: "Fundamentals of Genetics and Genetic Testing",
-          description: "Learn the basic principles of genetics, inheritance patterns, and the role of genetic testing in healthcare.",
-          topics: [
-            "DNA structure and function",
-            "Inheritance patterns",
-            "Types of genetic testing",
-            "Understanding test results"
-          ],
-          videoUrl: "https://www.youtube.com/embed/lMSIwbAJf1I"
-        }
-      },
-      {
-        id: "questions",
-        title: "Questions",
-        questions: [
-          {
-            text: "Knowing about inherited risk (passed down within a family) can affect choices about cancer treatments (for examples, medications or surgery).",
-            options: ["Agree", "Disagree"]
-          },
-          {
-            text: "People with an inherited risk for cancer (and their at-risk relatives) are more likely to develop more than one type of cancer",
-            options: ["Agree", "Disagree"]
-          }
-        ]
-      },
-      {
-        id: "proceed",
-        title: "Proceed to Testing",
-        question: "After reviewing the information provided would you like to proceed to testing?",
-        options: ["Yes", "No"]
-      }
-    ]
-  });
+  const [template, setTemplate] = useState(data || CourseBlockTemplate);
   const [currentSection, setCurrentSection] = useState("fundamentals");
   const [savedTemplate, setSavedTemplate] = useState(null);
 
@@ -75,6 +42,13 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
       setTemplate(savedTemplate);
     }
     setIsEditing(false);
+  };
+
+  const updateTemplate = (field, value) => {
+    const updatedTemplate = { ...template, [field]: value };
+    setTemplate(updatedTemplate);
+    // Notify parent of template changes
+    onTemplateChange(updatedTemplate);
   };
 
   const CourseSection = ({ section }) => (
@@ -177,14 +151,14 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
               <Label>Course Title</Label>
               <Input
                 value={template.title}
-                onChange={(e) => setTemplate({ ...template, title: e.target.value })}
+                onChange={e => updateTemplate('title', e.target.value)}
               />
             </div>
             <div>
               <Label>Subtitle</Label>
               <Input
                 value={template.subtitle}
-                onChange={(e) => setTemplate({ ...template, subtitle: e.target.value })}
+                onChange={e => updateTemplate('subtitle', e.target.value)}
               />
             </div>
           </TabsContent>
@@ -196,7 +170,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                   const newSection = {
                     id: `section-${template.sections.length + 1}`,
                     title: `New Section ${template.sections.length + 1}`,
-                    type: "content", // Default type
+                    type: "content",
                     content: {
                       title: "New Section",
                       description: "Section description",
@@ -204,10 +178,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                       videoUrl: ""
                     }
                   };
-                  setTemplate({
-                    ...template,
-                    sections: [...template.sections, newSection]
-                  });
+                  updateTemplate('sections', [...template.sections, newSection]);
                 }}
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -228,7 +199,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                             ...newSections[index],
                             title: e.target.value
                           };
-                          setTemplate({ ...template, sections: newSections });
+                          updateTemplate('sections', newSections);
                         }}
                       />
                     </div>
@@ -238,7 +209,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                         size="icon"
                         onClick={() => {
                           const newSections = template.sections.filter((_, i) => i !== index);
-                          setTemplate({ ...template, sections: newSections });
+                          updateTemplate('sections', newSections);
                         }}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -255,7 +226,6 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                         const newSections = [...template.sections];
                         const type = e.target.value;
 
-                        // Initialize appropriate structure based on type
                         if (type === "content") {
                           newSections[index] = {
                             ...newSections[index],
@@ -290,7 +260,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                           };
                         }
 
-                        setTemplate({ ...template, sections: newSections });
+                        updateTemplate('sections', newSections);
                       }}
                     >
                       <option value="content">Content Section</option>
@@ -314,7 +284,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 title: e.target.value
                               }
                             };
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         />
                       </div>
@@ -332,7 +302,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 description: e.target.value
                               }
                             };
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         />
                       </div>
@@ -346,7 +316,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                               onChange={(e) => {
                                 const newSections = [...template.sections];
                                 newSections[index].content.topics[topicIndex] = e.target.value;
-                                setTemplate({ ...template, sections: newSections });
+                                updateTemplate('sections', newSections);
                               }}
                             />
                             <Button
@@ -357,7 +327,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 newSections[index].content.topics = newSections[index].content.topics.filter(
                                   (_, i) => i !== topicIndex
                                 );
-                                setTemplate({ ...template, sections: newSections });
+                                updateTemplate('sections', newSections);
                               }}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -370,7 +340,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                           onClick={() => {
                             const newSections = [...template.sections];
                             newSections[index].content.topics.push("New Topic");
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -391,7 +361,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 videoUrl: e.target.value
                               }
                             };
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         />
                       </div>
@@ -411,7 +381,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                   onChange={(e) => {
                                     const newSections = [...template.sections];
                                     newSections[index].questions[questionIndex].text = e.target.value;
-                                    setTemplate({ ...template, sections: newSections });
+                                    updateTemplate('sections', newSections);
                                   }}
                                 />
                               </div>
@@ -424,7 +394,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                   newSections[index].questions = newSections[index].questions.filter(
                                     (_, i) => i !== questionIndex
                                   );
-                                  setTemplate({ ...template, sections: newSections });
+                                  updateTemplate('sections', newSections);
                                 }}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -440,7 +410,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                     onChange={(e) => {
                                       const newSections = [...template.sections];
                                       newSections[index].questions[questionIndex].options[optionIndex] = e.target.value;
-                                      setTemplate({ ...template, sections: newSections });
+                                      updateTemplate('sections', newSections);
                                     }}
                                   />
                                   <Button
@@ -451,7 +421,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                       newSections[index].questions[questionIndex].options = question.options.filter(
                                         (_, i) => i !== optionIndex
                                       );
-                                      setTemplate({ ...template, sections: newSections });
+                                      updateTemplate('sections', newSections);
                                     }}
                                   >
                                     <Trash2 className="h-4 w-4" />
@@ -464,7 +434,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 onClick={() => {
                                   const newSections = [...template.sections];
                                   newSections[index].questions[questionIndex].options.push("New Option");
-                                  setTemplate({ ...template, sections: newSections });
+                                  updateTemplate('sections', newSections);
                                 }}
                               >
                                 <Plus className="w-4 h-4 mr-2" />
@@ -482,7 +452,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                             text: "New Question",
                             options: ["Option 1", "Option 2"]
                           });
-                          setTemplate({ ...template, sections: newSections });
+                          updateTemplate('sections', newSections);
                         }}
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -500,7 +470,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                           onChange={(e) => {
                             const newSections = [...template.sections];
                             newSections[index].question = e.target.value;
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         />
                       </div>
@@ -514,7 +484,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                               onChange={(e) => {
                                 const newSections = [...template.sections];
                                 newSections[index].options[optionIndex] = e.target.value;
-                                setTemplate({ ...template, sections: newSections });
+                                updateTemplate('sections', newSections);
                               }}
                             />
                             <Button
@@ -525,7 +495,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                                 newSections[index].options = section.options.filter(
                                   (_, i) => i !== optionIndex
                                 );
-                                setTemplate({ ...template, sections: newSections });
+                                updateTemplate('sections', newSections);
                               }}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -538,7 +508,7 @@ const CourseBlock = ({ blockName, setBlockName, data, onTemplateChange, isWorkfl
                           onClick={() => {
                             const newSections = [...template.sections];
                             newSections[index].options.push("New Option");
-                            setTemplate({ ...template, sections: newSections });
+                            updateTemplate('sections', newSections);
                           }}
                         >
                           <Plus className="w-4 h-4 mr-2" />

@@ -374,7 +374,8 @@ const QuestionSection = ({ title, questions, onQuestionsChange, isEditing }) => 
   </div>
 );
 
-const ConsentForm = ({ data, onFormChange }) => {
+// const ConsentForm = ({ data, onFormChange }) => {
+const ConsentForm = ({ data, onTemplateChange, }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showSignature, setShowSignature] = useState(true);
   const [formData, setFormData] = useState(
@@ -390,12 +391,12 @@ const ConsentForm = ({ data, onFormChange }) => {
   const handleHeaderChange = (field, value) => {
     const updatedForm = { ...formData, [field]: value };
     setFormData(updatedForm);
-    onFormChange?.(updatedForm);
+    onTemplateChange?.(updatedForm);
   };
 
   const handleSave = () => {
     setIsEditing(false);
-    onFormChange?.(formData);
+    onTemplateChange?.(formData);
   };
 
   const handleRevert = () => {

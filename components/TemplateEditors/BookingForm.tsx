@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Settings2, Save, Undo, Check, Calendar, ChevronDown, Info, NotebookPen } from 'lucide-react'
+import { Settings2, Save, Undo, Check, Calendar, ChevronDown, Info, NotebookPen, MoveRightIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
@@ -9,7 +9,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
-const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBlock }) => {
+const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBlock, onTemplateChange }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [template, setTemplate] = useState(data || {
     title: "Book a Consultation",
@@ -21,8 +21,8 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
     },
     calendar: {
       timezones: [
-        { value: "nairobi", label: "Africa/Nairobi - EAT (+03:00)" },
         { value: "london", label: "Europe/London - GMT (+00:00)" },
+        { value: "nairobi", label: "Africa/Nairobi - EAT (+03:00)" },
         { value: "newyork", label: "America/New_York - EST (-05:00)" }
       ],
       morningSlots: ["11:00", "11:15"],
@@ -61,6 +61,13 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
     }
   })
   const [savedTemplate, setSavedTemplate] = useState({ ...template })
+
+
+  const updateTemplate = (field, value) => {
+    const updatedTemplate = { ...template, [field]: value };
+    setTemplate(updatedTemplate);
+    onTemplateChange(updatedTemplate);
+  };
 
   const handleSave = () => {
     setSavedTemplate({ ...template })
@@ -121,14 +128,17 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
               <Label>Title</Label>
               <Input
                 value={template.title}
-                onChange={(e) => setTemplate({ ...template, title: e.target.value })}
+                // onChange={(e) => setTemplate({ ...template, title: e.target.value })}
+                onChange={(e) => updateTemplate('title', e.target.value)}
               />
             </div>
             <div>
               <Label>Subtitle</Label>
               <Input
                 value={template.subtitle}
-                onChange={(e) => setTemplate({ ...template, subtitle: e.target.value })}
+                // onChange={(e) => setTemplate({ ...template, subtitle: e.target.value })}
+
+                onChange={(e) => updateTemplate('subtitle', e.target.value)}
               />
             </div>
           </div>
@@ -139,30 +149,34 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
               <Label>Service Title</Label>
               <Input
                 value={template.service.title}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  service: { ...template.service, title: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   service: { ...template.service, title: e.target.value }
+                // })}
+
+                onChange={(e) => updateTemplate('service', { ...template.service, title: e.target.value })}
               />
             </div>
             <div>
               <Label>Price</Label>
               <Input
                 value={template.service.price}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  service: { ...template.service, price: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   service: { ...template.service, price: e.target.value }
+                // })}
+                onChange={(e) => updateTemplate('service', { ...template.service, price: e.target.value })}
               />
             </div>
             <div>
               <Label>Duration</Label>
               <Input
                 value={template.service.duration}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  service: { ...template.service, duration: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   service: { ...template.service, duration: e.target.value }
+                // })}
+                onChange={(e) => updateTemplate('service', { ...template.service, duration: e.target.value })}
               />
             </div>
           </div>
@@ -173,12 +187,16 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
               <Label>Morning Time Slots (comma-separated)</Label>
               <Input
                 value={template.calendar.morningSlots.join(", ")}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  calendar: {
-                    ...template.calendar,
-                    morningSlots: e.target.value.split(",").map(s => s.trim())
-                  }
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   calendar: {
+                //     ...template.calendar,
+                //     morningSlots: e.target.value.split(",").map(s => s.trim())
+                //   }
+                // })}
+                onChange={(e) => updateTemplate('calendar', {
+                  ...template.calendar,
+                  morningSlots: e.target.value.split(",").map(s => s.trim())
                 })}
               />
             </div>
@@ -186,13 +204,15 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
               <Label>Night Time Slots (comma-separated)</Label>
               <Input
                 value={template.calendar.nightSlots.join(", ")}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  calendar: {
-                    ...template.calendar,
-                    nightSlots: e.target.value.split(",").map(s => s.trim())
-                  }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   calendar: {
+                //     ...template.calendar,
+                //     nightSlots: e.target.value.split(",").map(s => s.trim())
+                //   }
+                // })}
+
+                onChange={(e) => updateTemplate('calendar', { ...template.calendar, nightSlots: e.target.value.split(",").map(s => s.trim()) })}
               />
             </div>
           </div>
@@ -206,13 +226,16 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
                   <Button
                     variant="outline"
                     size="sm"
+
+                    // onChange={(e) => updateTemplate('service', { ...template.service, price: e.target.value })}
                     onClick={() => {
                       const newFields = [...template.form.fields];
                       newFields.splice(index, 1);
-                      setTemplate({
-                        ...template,
-                        form: { ...template.form, fields: newFields }
-                      });
+                      // setTemplate({
+                      //   ...template,
+                      //   form: { ...template.form, fields: newFields }
+                      // });
+                      updateTemplate('form', { ...template.form, fields: newFields })
                     }}
                   >
                     Remove
@@ -224,10 +247,12 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
                   onChange={(e) => {
                     const newFields = [...template.form.fields];
                     newFields[index] = { ...field, label: e.target.value };
-                    setTemplate({
-                      ...template,
-                      form: { ...template.form, fields: newFields }
-                    });
+                    // setTemplate({
+                    //   ...template,
+                    //   form: { ...template.form, fields: newFields }
+                    // });
+
+                    updateTemplate('form', { ...template.form, fields: newFields })
                   }}
                 />
                 <Input
@@ -236,10 +261,11 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
                   onChange={(e) => {
                     const newFields = [...template.form.fields];
                     newFields[index] = { ...field, placeholder: e.target.value };
-                    setTemplate({
-                      ...template,
-                      form: { ...template.form, fields: newFields }
-                    });
+                    // setTemplate({
+                    //   ...template,
+                    //   form: { ...template.form, fields: newFields }
+                    // });
+                    updateTemplate('form', { ...template.form, fields: newFields })
                   }}
                 />
                 <div className="flex items-center gap-2">
@@ -248,10 +274,11 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
                     onCheckedChange={(checked) => {
                       const newFields = [...template.form.fields];
                       newFields[index] = { ...field, required: checked };
-                      setTemplate({
-                        ...template,
-                        form: { ...template.form, fields: newFields }
-                      });
+                      // setTemplate({
+                      //   ...template,
+                      //   form: { ...template.form, fields: newFields }
+                      // });
+                      updateTemplate('form', { ...template.form, fields: newFields })
                     }}
                   />
                   <Label>Required</Label>
@@ -268,13 +295,15 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
                   type: "text",
                   required: false
                 };
-                setTemplate({
-                  ...template,
-                  form: {
-                    ...template.form,
-                    fields: [...template.form.fields, newField]
-                  }
-                });
+                // setTemplate({
+                //   ...template,
+                //   form: {
+                //     ...template.form,
+                //     fields: [...template.form.fields, newField]
+                //   }
+                // });
+
+                updateTemplate('form', { ...template.form, fields: [...template.form.fields, newField] })
               }}
             >
               Add Field
@@ -287,40 +316,45 @@ const BookingConsultationEditor = ({ data, blockName, setBlockName, isWorkflowBl
               <Label>Contract Consent Text</Label>
               <Input
                 value={template.consent.contract}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  consent: { ...template.consent, contract: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   consent: { ...template.consent, contract: e.target.value }
+                // })}
+
+                onChange={(e) => updateTemplate('consent', { ...template.consent, contract: e.target.value })}
               />
             </div>
             <div>
               <Label>Health Data Consent Text</Label>
               <Input
                 value={template.consent.health}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  consent: { ...template.consent, health: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   consent: { ...template.consent, health: e.target.value }
+                // })}
+                onChange={(e) => updateTemplate('consent', { ...template.consent, health: e.target.value })}
               />
             </div>
             <div>
               <Label>Data Transfer Consent Text</Label>
               <Input
                 value={template.consent.transfer}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  consent: { ...template.consent, transfer: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   consent: { ...template.consent, transfer: e.target.value }
+                // })}
+                onChange={(e) => updateTemplate('consent', { ...template.consent, transfer: e.target.value })}
               />
             </div>
             <div>
               <Label>Terms Consent Text</Label>
               <Input
                 value={template.consent.terms}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  consent: { ...template.consent, terms: e.target.value }
-                })}
+                // onChange={(e) => setTemplate({
+                //   ...template,
+                //   consent: { ...template.consent, terms: e.target.value }
+                // })}
+                onChange={(e) => updateTemplate('consent', { ...template.consent, terms: e.target.value })}
               />
             </div>
           </div>
@@ -393,7 +427,7 @@ function BookingForm({ template }) {
                 <div>
                   <div className="mb-6">
                     <Label>Timezone</Label>
-                    <Select defaultValue="nairobi">
+                    <Select defaultValue="london">
                       <SelectTrigger>
                         <SelectValue placeholder="Select timezone" />
                       </SelectTrigger>
@@ -410,20 +444,19 @@ function BookingForm({ template }) {
                     <div className="mb-4">
                       <Label>Morning</Label>
                       <div className="grid grid-cols-2 gap-2">
-                        <Button variant="outline" onClick={() => setSelectedTimeSlot("11:00")}>11:00</Button>
-                        <Button variant="outline" onClick={() => setSelectedTimeSlot("11:15")}>11:15</Button>
+                        <Button variant="outline" onClick={() => setSelectedTimeSlot(template.calendar.morningSlots[0])}>{template.calendar.morningSlots[0]}</Button>
+                        <Button variant="outline" onClick={() => setSelectedTimeSlot(template.calendar.morningSlots[1])}>{template.calendar.morningSlots[1]}</Button>
                       </div>
                     </div>
                     <div>
                       <Label>Night</Label>
                       <div className="grid grid-cols-3 gap-2">
-                        {["22:00", "22:15", "22:30", "22:45", "23:00", "23:15"].map(time => (
+                        {template.calendar.nightSlots.map(time => (
                           <Button
                             key={time}
                             variant="outline"
                             onClick={() => setSelectedTimeSlot(time)}
-                            className={selectedTimeSlot === time ? 'bg-primary text-white' : ''}
-                          >
+                            className={selectedTimeSlot === time ? 'bg-primary text-white' : ''}>
                             {time}
                           </Button>
                         ))}
@@ -437,24 +470,24 @@ function BookingForm({ template }) {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Patient's First Name *</Label>
+                    <Label>{template.form.fields[0].label} *</Label>
                     <Input placeholder="Patient's First Name" />
                   </div>
                   <div>
-                    <Label>Last Name *</Label>
+                    <Label>{template.form.fields[1].label} *</Label>
                     <Input placeholder="Last Name" />
                   </div>
                 </div>
                 <div>
-                  <Label>Date of Birth *</Label>
+                  <Label>{template.form.fields[2].label} *</Label>
                   <Input type="date" />
                 </div>
                 <div>
-                  <Label>Email *</Label>
+                  <Label>{template.form.fields[3].label} *</Label>
                   <Input type="email" placeholder="Email" />
                 </div>
                 <div>
-                  <Label>Phone Number *</Label>
+                  <Label>{template.form.fields[4].label} *</Label>
                   <div className="flex gap-2">
                     <Select defaultValue="+254">
                       <SelectTrigger className="w-24">
@@ -468,7 +501,7 @@ function BookingForm({ template }) {
                   </div>
                 </div>
                 <div>
-                  <Label>Country of Residence *</Label>
+                  <Label>{template.form.fields[5].label} *</Label>
                   <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Select Option" />

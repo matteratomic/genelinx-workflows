@@ -5,7 +5,9 @@ export function generateWorkflowLink(workflow) {
     name: workflow.name,
     blocks: workflow.blocks.map(block => ({
       id: block.id,
-      title: block.title
+      title: block.title,
+      type: block.type,
+      custom: block.custom
     }))
   };
 

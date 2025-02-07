@@ -4,10 +4,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const OTPTemplateEditor = ({ blockName, setBlockName,
+const OTPTemplateEditor = ({
   data,
   onTemplateChange,
-  isWorkflowBlock }) => {
+  isWorkflowBlock
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [template, setTemplate] = useState({
     title: 'Email Confirmation',

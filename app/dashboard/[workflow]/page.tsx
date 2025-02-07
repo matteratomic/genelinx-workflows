@@ -7,14 +7,20 @@ import { Card } from '@/components/ui/card';
 import OTPTemplateEditor from '@/components/TemplateEditors/OTP';
 import PaymentTemplateEditor from '@/components/TemplateEditors/Payment';
 import FormBlock from '@/components/TemplateEditors/FormBlock';
-import { BookingConsultationTemplate, CourseBlockTemplate, FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScreeningQuestinnaireTemplate } from '@/components/TemplateEditors/constants';
+import { BookingConsultationTemplate, CourseBlockTemplate, FamilyHistoryTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, OTPTemplate, PatientDetailsTemplate, PaymentTemplate, ScreeningQuestinnaireTemplate } from '@/components/TemplateEditors/constants';
 import BookConsultation from '@/components/TemplateEditors/BookConsultation';
 import { useRouter } from 'next/navigation';
 import CourseBlock from '@/components/Course';
 
 const blockComponents = {
-  'OTP Code': { component: OTPTemplateEditor },
-  'Payment Request': { component: PaymentTemplateEditor },
+  'OTP Code': {
+    component: OTPTemplateEditor,
+    data: OTPTemplate
+  },
+  'Payment Request': {
+    component: PaymentTemplateEditor,
+    data: PaymentTemplate
+  },
   'Patient Details': {
     component: FormBlock,
     data: PatientDetailsTemplate

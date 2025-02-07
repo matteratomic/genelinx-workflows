@@ -1,12 +1,15 @@
 'use client'
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Edit, LayoutDashboard, Plus, Settings, Share2 } from 'lucide-react';
+import { Edit, LayoutDashboard, Plus, Settings, Share2, Trash } from 'lucide-react';
 import CreateWorkflowModal from '@/components/CreateWorkflowModal';
 import Link from 'next/link';
 import { generateWorkflowShareLink } from '@/utils/workflowLink';
 import { toast } from 'sonner';
+import { createClient } from '@/utils/supabase/client';
+import Loader from '@/components/Loader';
 
 interface SavedWorkflow {
   id: string;
@@ -16,7 +19,7 @@ interface SavedWorkflow {
   createdAt: Date;
 }
 
-export function WorkflowCard({ workflow, onEdit }) {
+export function WorkflowCard({ workflow, onEdit, onDelete }) {
   const handleShare = () => {
     const link = generateWorkflowShareLink(workflow);
     navigator.clipboard.writeText(link);
@@ -24,7 +27,16 @@ export function WorkflowCard({ workflow, onEdit }) {
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden relative ">
+      <Button
+        onClick={() => {
+          const response = window.confirm('Would you like to delete this workflow?')
+          response && onDelete(workflow.id);
+        }}
+        className="absolute top-4 right-4 bg-white hover:bg-white" size="icon">
+        <Trash
+          className="text-red-500 w-4 h-4" />
+      </Button>
       <CardContent className="p-6">
         <h3 className="text-xl font-semibold mb-2">{workflow.name}</h3>
         <p className="text-slate-600 mb-4 w-10/12">{workflow.description}</p>
@@ -68,22 +80,84 @@ export function WorkflowCard({ workflow, onEdit }) {
 }
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false);
   const [workflows, setWorkflows] = useState<SavedWorkflow[]>([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState<SavedWorkflow | null>(null);
 
+  const supabase = createClient()
+
+  const saveWorkflow = async (workflow: Omit<SavedWorkflow, 'id' | 'createdAt'>) => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('workflows')
+      .insert({
+        name: workflow.name,
+        description: workflow.description,
+        blocks: workflow.blocks
+      })
+      .select()
+      .single();
+
+    setLoading(false)
+    if (error) throw error;
+    return data;
+  }
+
+  const updateWorkflow = async (workflow: SavedWorkflow) => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('workflows')
+      .update({
+        name: workflow.name,
+        description: workflow.description,
+        blocks: workflow.blocks
+      })
+      .eq('id', workflow.id)
+      .select()
+      .single();
+
+    setLoading(false)
+    if (error) throw error;
+    return data;
+  }
+
+  const listWorkflows = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('workflows')
+      .select()
+      .order('created_at', { ascending: false });
+
+    setLoading(false)
+    if (error) throw error;
+    return data;
+  }
+
+  const deleteWorkflow = async (id: string) => {
+    setLoading(true)
+    const { error } = await supabase
+      .from('workflows')
+      .delete()
+      .eq('id', id);
+
+    setWorkflows(currentWorkflows => {
+      return currentWorkflows.filter(w => w.id !== id);
+    })
+    setLoading(false)
+    if (error) throw error;
+  }
+
   // Load saved workflows on mount
   useEffect(() => {
-    const savedWorkflows = localStorage.getItem('workflows');
-    if (savedWorkflows) {
-      setWorkflows(JSON.parse(savedWorkflows));
+    const loadWorkflows = async () => {
+      const workflows = await listWorkflows();
+      setWorkflows(workflows);
     }
+
+    loadWorkflows();
   }, []);
 
-  // Save workflows whenever they change
-  useEffect(() => {
-    localStorage.setItem('workflows', JSON.stringify(workflows));
-  }, [workflows]);
 
   const toggleModal = (workflow?: SavedWorkflow) => {
     setSelectedWorkflow(workflow || null);
@@ -102,6 +176,13 @@ const Dashboard = () => {
         return [...currentWorkflows, workflow];
       }
     });
+
+    if (selectedWorkflow) {
+      return updateWorkflow(workflow);
+    } else {
+      return saveWorkflow(workflow);
+    }
+
   };
 
   return (
@@ -137,12 +218,14 @@ const Dashboard = () => {
         <div className="">
           <h2 className="text-xl font-semibold text-green-900 mb-6">Workflows</h2>
           {workflows.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {workflows.map((workflow) => (
                 <WorkflowCard
                   key={workflow.id}
                   workflow={workflow}
-                  onEdit={toggleModal} />
+                  onEdit={toggleModal}
+                  onDelete={deleteWorkflow}
+                />
               ))}
             </div>
           ) : (
@@ -162,41 +245,9 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+      {loading ? <Loader /> : null}
     </div>
   );
 };
 
 export default Dashboard;
-
-{/* <Card key={workflow.id} className="overflow-hidden"> */ }
-{/*   <CardContent className="p-6"> */ }
-{/*     <h3 className="text-xl font-semibold mb-2">{workflow.name}</h3> */ }
-{/*     <p className="text-slate-600 mb-4 w-10/12">{workflow.description}</p> */ }
-{/*     <div className="mb-4"> */ }
-{/*       <h4 className="text-sm font-medium text-gray-500 mb-2">Blocks:</h4> */ }
-{/*       <div className="flex flex-wrap gap-2"> */ }
-{/*         {workflow.blocks.map((block) => ( */ }
-{/*           <span */ }
-{/*             key={block.id} */ }
-{/*             className="px-2 py-1 bg-green-50 text-green-700 rounded-md text-sm" */ }
-{/*           > */ }
-{/*             {block.title} */ }
-{/*           </span> */ }
-{/*         ))} */ }
-{/*       </div> */ }
-{/*     </div> */ }
-{/*     <div className='flex justify-end space-x-3'> */ }
-{/*       <Button */ }
-{/*         variant="outline" */ }
-{/*         onClick={() => toggleModal(workflow)} */ }
-{/*       > */ }
-{/*         Edit */ }
-{/*       </Button> */ }
-{/*       <Link href={`/dashboard/${workflow.id}`}> */ }
-{/*         <Button className="text-white bg-green-700 hover:bg-green-600"> */ }
-{/*           Open */ }
-{/*         </Button> */ }
-{/*       </Link> */ }
-{/*     </div> */ }
-{/*   </CardContent> */ }
-{/* </Card> */ }

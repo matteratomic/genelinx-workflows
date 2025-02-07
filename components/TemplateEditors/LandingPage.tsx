@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Settings2, Save, Undo } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -62,6 +61,13 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
     setIsEditing(false);
   };
 
+  const updateTemplate = (field: string, value: string) => {
+    const updatedTemplate = { ...template, [field]: value };
+    setTemplate(updatedTemplate);
+    // Notify parent of template changes
+    onTemplateChange(updatedTemplate);
+  };
+
   return (
     <div className={`w-full pt-0 space-y-4 ${isWorkflowBlock && "-mt-12"}`}>
       <div className="flex justify-start space-x-2">
@@ -100,49 +106,37 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
               <Label>Title</Label>
               <Input
                 value={template.hero.title}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  hero: { ...template.hero, title: e.target.value }
-                })}
+                onChange={(e) => updateTemplate('hero', { ...template.hero, title: e.target.value })}
               />
             </div>
             <div>
               <Label>Description</Label>
               <Textarea
                 value={template.hero.description}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  hero: { ...template.hero, description: e.target.value }
-                })}
+                onChange={(e) => updateTemplate('hero', { ...template.hero, description: e.target.value })}
               />
             </div>
             <div>
               <Label>Button Text</Label>
               <Input
                 value={template.hero.buttonText}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  hero: { ...template.hero, buttonText: e.target.value }
-                })}
+                onChange={(e) => updateTemplate('hero', { ...template.hero, buttonText: e.target.value })}
               />
             </div>
             <div>
               <Label>Button Link</Label>
               <Input
                 value={template.hero.buttonLink}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  hero: { ...template.hero, buttonLink: e.target.value }
-                })}
+                onChange={(e) => updateTemplate('hero', { ...template.hero, buttonLink: e.target.value })}
               />
             </div>
             <div>
               <Label>Image URL</Label>
               <Input
                 value={template.hero.image}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  hero: { ...template.hero, image: e.target.value }
+                onChange={(e) => updateTemplate('hero', {
+                  ...template.hero,
+                  image: e.target.value
                 })}
               />
             </div>
@@ -153,10 +147,11 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
               <Label>Section Title</Label>
               <Input
                 value={template.information.title}
-                onChange={(e) => setTemplate({
-                  ...template,
-                  information: { ...template.information, title: e.target.value }
-                })}
+                onChange={(e) => updateTemplate('information',
+                  {
+                    ...template.information,
+                    title: e.target.value
+                  })}
               />
             </div>
             <div>
@@ -168,10 +163,11 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
                     onChange={(e) => {
                       const newContent = [...template.information.content];
                       newContent[index] = e.target.value;
-                      setTemplate({
-                        ...template,
-                        information: { ...template.information, content: newContent }
-                      });
+                      updateTemplate('information',
+                        {
+                          ...template.information,
+                          content: newContent
+                        })
                     }}
                   />
                 </div>
@@ -182,28 +178,22 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
                 <Label>Primary Button Text</Label>
                 <Input
                   value={template.information.buttons.primary.text}
-                  onChange={(e) => setTemplate({
-                    ...template,
-                    information: {
-                      ...template.information,
-                      buttons: {
-                        ...template.information.buttons,
-                        primary: { ...template.information.buttons.primary, text: e.target.value }
-                      }
+                  onChange={(e) => updateTemplate('information', {
+                    ...template.information,
+                    buttons: {
+                      ...template.information.buttons,
+                      primary: { ...template.information.buttons.primary, text: e.target.value }
                     }
                   })}
                 />
                 <Label className="mt-2">Primary Button Link</Label>
                 <Input
                   value={template.information.buttons.primary.link}
-                  onChange={(e) => setTemplate({
-                    ...template,
-                    information: {
-                      ...template.information,
-                      buttons: {
-                        ...template.information.buttons,
-                        primary: { ...template.information.buttons.primary, link: e.target.value }
-                      }
+                  onChange={(e) => updateTemplate('information', {
+                    ...template.information,
+                    buttons: {
+                      ...template.information.buttons,
+                      primary: { ...template.information.buttons.primary, link: e.target.value }
                     }
                   })}
                 />
@@ -212,13 +202,13 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
                 <Label>Secondary Button Text</Label>
                 <Input
                   value={template.information.buttons.secondary.text}
-                  onChange={(e) => setTemplate({
-                    ...template,
-                    information: {
-                      ...template.information,
-                      buttons: {
-                        ...template.information.buttons,
-                        secondary: { ...template.information.buttons.secondary, text: e.target.value }
+                  onChange={(e) => updateTemplate('information', {
+                    ...template.information,
+                    buttons: {
+                      ...template.information.buttons,
+                      secondary: {
+                        ...template.information.buttons.secondary,
+                        text: e.target.value
                       }
                     }
                   })}
@@ -226,13 +216,13 @@ const LandingPageEditor = ({ blockName, setBlockName, data, onTemplateChange, is
                 <Label className="mt-2">Secondary Button Link</Label>
                 <Input
                   value={template.information.buttons.secondary.link}
-                  onChange={(e) => setTemplate({
-                    ...template,
-                    information: {
-                      ...template.information,
-                      buttons: {
-                        ...template.information.buttons,
-                        secondary: { ...template.information.buttons.secondary, link: e.target.value }
+                  onChange={(e) => updateTemplate('information', {
+                    ...template.information,
+                    buttons: {
+                      ...template.information.buttons,
+                      secondary: {
+                        ...template.information.buttons.secondary,
+                        link: e.target.value
                       }
                     }
                   })}

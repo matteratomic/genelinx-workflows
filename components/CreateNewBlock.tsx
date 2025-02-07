@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import OTPTemplateEditor from './TemplateEditors/OTP';
 import PaymentTemplateEditor from './TemplateEditors/Payment';
 import FormBlock from './TemplateEditors/FormBlock';
-import { BookingConsultationTemplate, BookingTemplate, ConsentFormTemplate, CourseBlockTemplate, FamilyHistoryTemplate, LandingPageTemplate, MedicalHistoryTemplate, OptionalQuestionnaireTemplate, PatientDetailsTemplate, ScheduleAppointmentTemplate, ScreeningQuestinnaireTemplate, SubmissionResultTemplate } from './TemplateEditors/constants';
+import {
+  OTPTemplate,
+  PaymentTemplate,
+  BookingTemplate,
+  ConsentFormTemplate,
+  CourseBlockTemplate,
+  LandingPageTemplate,
+  FamilyHistoryTemplate,
+  MedicalHistoryTemplate,
+  PatientDetailsTemplate,
+  SubmissionResultTemplate,
+  BookingConsultationTemplate,
+  ScheduleAppointmentTemplate,
+  ScreeningQuestinnaireTemplate,
+  OptionalQuestionnaireTemplate,
+} from './TemplateEditors/constants';
 import BookConsultation from './TemplateEditors/BookConsultation';
 import ScheduleAppointment from './TemplateEditors/ScheduleAppointment';
 import Booking from './TemplateEditors/BookingForm';
@@ -15,8 +29,14 @@ import SubmissionResult from './TemplateEditors/SubmissionResult';
 import ConsentForm from './TemplateEditors/ConsentForm';
 
 const templateMap = {
-  'OTP Code': { template: OTPTemplateEditor },
-  'Payment Request': { template: PaymentTemplateEditor },
+  'OTP Code': {
+    template: OTPTemplateEditor,
+    data: OTPTemplate
+  },
+  'Payment Request': {
+    template: PaymentTemplateEditor,
+    data: PaymentTemplate
+  },
   'Patient Details': {
     template: FormBlock,
     data: PatientDetailsTemplate
@@ -92,6 +112,8 @@ const CreateNewBlock: React.FC<CreateNewBlockProps> = ({
       // Load the saved template state
       setTemplateState(existingBlock.template);
     } else {
+      // console.log('This is the selectedTemplate', selectedTemplate)
+      // console.log('This is what is being set in templateState', templateMap[selectedTemplate]?.data)
       // For new blocks, use the default template data
       setTemplateState(templateMap[selectedTemplate]?.data);
     }
@@ -107,14 +129,18 @@ const CreateNewBlock: React.FC<CreateNewBlockProps> = ({
 
     // Get the latest template state
     const currentTemplateState = templateRef.current || templateState;
-
+    console.log(`SelectedTemplate ${blockName}`, selectedTemplate)
+    console.log(`Calling handleSave ${blockName}`, templateRef.current)
+    console.log(`Calling handleSave 2 ${blockName}`, templateState)
     // Save both the name and template state
     onSave(blockName, currentTemplateState);
   };
 
   const handleTemplateChange = (newState: any) => {
+    console.log('addding to master state', newState)
     templateRef.current = newState;
     setTemplateState(newState);
+    console.log('here it is', templateState)
   };
 
   return (
@@ -152,6 +178,7 @@ const CreateNewBlock: React.FC<CreateNewBlockProps> = ({
               onTemplateChange={handleTemplateChange}
             />
           )}
+          {/* {JSON.stringify(templateState.questions, null, 3)} */}
         </div>
         <div className="sticky bottom-0 right-0 left-0 bg-gray-100 p-4 mt-6 space-x-3 flex justify-end">
           <Button onClick={onClose} variant="outline">Close</Button>

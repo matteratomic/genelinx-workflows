@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, GripVertical, X } from 'lucide-react';
+import { GripVertical, X } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { createClient } from '@/utils/supabase/client';
 
 interface WorkflowBlock {
   id: number;
@@ -21,7 +21,7 @@ interface SavedWorkflow {
   createdAt: Date;
 }
 
-const workflowBlocks: WorkflowBlock[] = [
+const workflowBlocksDefault: WorkflowBlock[] = [
   { id: 1, title: 'OTP Code', description: "Creates an OTP Code block" },
   { id: 2, title: 'Book a Consultation', description: "Creates a consultation booking block" },
   { id: 3, title: 'Payment Request', description: "Creates a payment request block" },
@@ -32,12 +32,10 @@ const workflowBlocks: WorkflowBlock[] = [
   { id: 7, title: 'Make a Course', description: "Creates a Course block" },
   { id: 8, title: 'Screening Questionnaire', description: "Creates a questionnaire block" },
   { id: 9, title: 'Optional Questionnaire', description: "Creates a optional questionnaire block" },
-  // { id: 10, title: 'Consultation Form', description: "Creates a consultation block" },
   { id: 11, title: 'Schedule Appointment', description: "Creates a schedule appointment block" },
   { id: 12, title: 'Consultation Form', description: "Creates a consultation form block" },
   { id: 15, title: 'Submission Result', description: "Creates a submission result block" },
   { id: 16, title: 'Consent Form', description: "Creates a consent form block" },
-  // { id: 13, title: 'Question & Answer', description: "Creates a question and answer block" },
 ];
 
 interface CreateWorkflowModalProps {
@@ -55,6 +53,28 @@ const CreateWorkflowModal: React.FC<CreateWorkflowModalProps> = ({
   const [description, setDescription] = useState('');
   const [selectedBlocks, setSelectedBlocks] = useState<WorkflowBlock[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [workflowBlocks, setWorkflowBlocks] = useState(workflowBlocksDefault)
+  const [loading, setLoading] = useState(false)
+  const supabase = createClient()
+
+  const listBlocks = async (type?: string) => {
+    setLoading(true)
+    let query = supabase
+      .from('blocks')
+      .select()
+      .order('created_at', { ascending: false });
+
+    if (type) {
+      query = query.eq('type', type);
+    }
+
+    const { data, error } = await query;
+    // setSavedBlocks(data)
+    setLoading(false)
+
+    if (error) throw error;
+    return data;
+  }
 
   useEffect(() => {
     if (existingWorkflow) {
@@ -63,6 +83,18 @@ const CreateWorkflowModal: React.FC<CreateWorkflowModalProps> = ({
       setSelectedBlocks(existingWorkflow.blocks);
     }
   }, [existingWorkflow]);
+
+
+  useEffect(() => {
+    const loadBlocks = async () => {
+      const blocks = await listBlocks()
+      setWorkflowBlocks([
+        ...(blocks.map(b => ({ id: b.id, title: b.name, description: b.description, type: b.type, custom: b.custom }))),
+        ...workflowBlocksDefault
+      ])
+    }
+    loadBlocks()
+  }, [])
 
   const handleSave = () => {
     if (!name.trim()) {
@@ -155,15 +187,14 @@ const CreateWorkflowModal: React.FC<CreateWorkflowModalProps> = ({
                 {workflowBlocks.map((block) => (
                   <div
                     key={block.id}
-                    className="flex items-start space-x-3 p-4 border rounded-md hover:bg-gray-50"
-                  >
+                    className="flex items-start space-x-3 p-4 border rounded-md hover:bg-gray-50">
                     <Checkbox
                       checked={selectedBlocks.some(b => b.id === block.id)}
                       onCheckedChange={() => handleBlockToggle(block)}
                     />
                     <div>
                       <Label className="text-base font-medium">{block.title}</Label>
-                      <p className="text-sm text-gray-500">{block.description}</p>
+                      <p className="text-sm text-gray-500">{block.description || "Custom Block"}</p>
                     </div>
                   </div>
                 ))}

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import FormBlock from './FormBlock';
 import { BookingConsultationTemplate } from './constants';
 import { GripVertical } from 'lucide-react';
-// import PatientFormEditor from './PatientFormEditor';
 
 const DraggableSteps = ({ steps, currentStep, onStepChange, onReorder }) => {
   const [draggedIndex, setDraggedIndex] = useState(null);
@@ -94,23 +93,50 @@ const DraggableSteps = ({ steps, currentStep, onStepChange, onReorder }) => {
   );
 };
 
-const FormContainer = ({ isWorkflowBlock }) => {
-  const [steps, setSteps] = useState(BookingConsultationTemplate.steps);
+const FormContainer = ({ data, isWorkflowBlock, onTemplateChange }) => {
+  const [template, setTemplate] = useState(data || BookingConsultationTemplate);
+  // const [steps, setSteps] = useState(BookingConsultationTemplate.steps);
+  const steps = template.steps
   const [currentStep, setCurrentStep] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const templateRef = useRef<any>();
+
+  // Load initial data if provided
+  useEffect(() => {
+    if (data) {
+      setTemplate(data);
+    }
+  }, [data]);
 
   const handleReorder = (newSteps) => {
     // console.log('here are the old steps', steps)
     // console.log('here are the new steps', newSteps)
-    setSteps(newSteps);
+    // setSteps(newSteps);
+    const updatedTemplate = { ...template, steps: newSteps }
+    setTemplate(updatedTemplate);
+    onTemplateChange(updatedTemplate);
 
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    // Notify parent of template changes
+    onTemplateChange(template);
+  };
+
+
+  const updateTemplate = (field: string, value: string) => {
+    const updatedTemplate = { ...template, [field]: value };
+    setTemplate(updatedTemplate);
+    // Notify parent of template changes
+    onTemplateChange(updatedTemplate);
   };
 
   const renderStepIndicator = () => {
     return (
       <div className="relative custom-scrollbar flex items-center gap-2 mb-6 overflow-x-auto pb-4">
         {/* <div className="absolute h-full w-1/12 bg-gradient-to-tr from-transparent via-white/50 to-white right-0"></div> */}
-        {BookingConsultationTemplate.steps.map((step, index) => (
+        {template?.steps ? template.steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <Button
               variant={currentStep === index ? "default" : "outline"}
@@ -118,48 +144,61 @@ const FormContainer = ({ isWorkflowBlock }) => {
               onClick={() => setCurrentStep(index)}>
               {step.title}
             </Button>
-            {index < BookingConsultationTemplate.steps.length - 1 && (
+            {index < template.steps.length - 1 && (
               <span className="text-gray-400">›</span>
             )}
           </React.Fragment>
-        ))}
+        )) : null}
       </div>
     );
   };
 
-  const renderHeader = () => (
-    <div className="mb-8">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="text-emerald-800 font-semibold text-xl">GeneLinx</div>
-      </div>
-      <h1 className="text-2xl font-bold text-emerald-900 mb-4">{BookingConsultationTemplate.title}</h1>
-      <p className="text-gray-600 mb-4">{BookingConsultationTemplate.subtitle}</p>
-      {BookingConsultationTemplate.notes.map((note, index) => (
-        <p key={index} className="text-gray-600 mb-2">
-          <strong className="font-semibold">Please note: </strong>
-          {note}
-        </p>
-      ))}
-    </div>
-  );
+  // const renderHeader = () => (
+  //   <div className="mb-8">
+  //     <div className="flex items-center gap-2 mb-4">
+  //       <div className="text-emerald-800 font-semibold text-xl">GeneLinx</div>
+  //     </div>
+  //     <h1 className="text-2xl font-bold text-emerald-900 mb-4">{BookingConsultationTemplate.title}</h1>
+  //     <p className="text-gray-600 mb-4">{BookingConsultationTemplate.subtitle}</p>
+  //     {BookingConsultationTemplate.notes.map((note, index) => (
+  //       <p key={index} className="text-gray-600 mb-2">
+  //         <strong className="font-semibold">Please note: </strong>
+  //         {note}
+  //       </p>
+  //     ))}
+  //   </div>
+  // );
 
+
+  const handleTemplateChange = (index: number, newState: any) => {
+    console.log('addding to master state', newState)
+    const newTemplateState = {
+      ...template,
+      steps: template.steps.map((step, i) => i === index ? {
+        ...step,
+        template: newState
+      } : step)
+    }
+    templateRef.current = newTemplateState;
+    setTemplate(newTemplateState);
+    onTemplateChange(newTemplateState);
+    console.log('here it is', newTemplateState)
+  };
   const renderCurrentStep = () => {
-    const currentTemplate = BookingConsultationTemplate.steps[currentStep].template;
     return (
       <div className="mb-6">
-        {steps.map((_, i) => {
+        {template?.steps ? template.steps.map((_, i) => {
           return <FormBlock
             key={i}
             hidden={i !== currentStep}
-            // data={BookingConsultationTemplate.steps[i].template}
-            // data={BookingConsultationTemplate.steps[currentStep].template}
-            data={steps[i].template}
-            watchData={steps[i].template}
+            data={template?.steps[i].template}
+            watchData={template?.steps[i].template}
             isEditing={isEditing}
             isWorkflowBlock={isWorkflowBlock}
             onSave={() => setIsEditing(false)}
+            onTemplateChange={(state) => handleTemplateChange(i, state)}
           />
-        })}
+        }) : null}
       </div>
     );
   };
@@ -181,9 +220,8 @@ const FormContainer = ({ isWorkflowBlock }) => {
           Previous
         </Button>
         <Button
-          onClick={() => setCurrentStep(Math.min(BookingConsultationTemplate.steps.length - 1, currentStep + 1))}
-          disabled={currentStep === BookingConsultationTemplate.steps.length - 1}
-        >
+          onClick={() => setCurrentStep(Math.min(template?.steps?.length - 1, currentStep + 1))}
+          disabled={currentStep === template?.steps?.length - 1}>
           Next
         </Button>
       </div>
