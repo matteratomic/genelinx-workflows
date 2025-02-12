@@ -58,8 +58,7 @@ const DraggableSteps = ({ steps, currentStep, onStepChange, onReorder }) => {
       {steps.map((step, index) => (
         <div
           key={step.id}
-          className={`step-item flex items-center ${draggedIndex === index ? 'opacity-40' : ''
-            }`}
+          className={`step-item flex items-center ${draggedIndex === index ? 'opacity-40' : ''}`}
           draggable="true"
           onDragStart={(e) => handleDragStart(index, e)}
           onDragOver={(e) => handleDragOver(index, e)}
@@ -153,21 +152,22 @@ const FormContainer = ({ data, isWorkflowBlock, onTemplateChange }) => {
     );
   };
 
-  // const renderHeader = () => (
-  //   <div className="mb-8">
-  //     <div className="flex items-center gap-2 mb-4">
-  //       <div className="text-emerald-800 font-semibold text-xl">GeneLinx</div>
-  //     </div>
-  //     <h1 className="text-2xl font-bold text-emerald-900 mb-4">{BookingConsultationTemplate.title}</h1>
-  //     <p className="text-gray-600 mb-4">{BookingConsultationTemplate.subtitle}</p>
-  //     {BookingConsultationTemplate.notes.map((note, index) => (
-  //       <p key={index} className="text-gray-600 mb-2">
-  //         <strong className="font-semibold">Please note: </strong>
-  //         {note}
-  //       </p>
-  //     ))}
-  //   </div>
-  // );
+  const renderHeader = () => (
+    <div className="mb-8">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="text-emerald-800 font-semibold text-xl">GeneLinx</div>
+      </div>
+      <h1 className="text-2xl font-bold text-emerald-900 mb-4">{template.steps[currentStep].title}</h1>
+      {/* {JSON.stringify(template.steps[currentStep].template)} */}
+      <p className="text-gray-600 mb-4">{template.steps[currentStep].template.subtitle}</p>
+      {template.steps[currentStep].template.notes ? template.steps[currentStep].template.notes.map((note, index) => (
+        <p key={index} className="text-gray-600 mb-2">
+          <strong className="font-semibold">Please note: </strong>
+          {note}
+        </p>
+      )) : null}
+    </div>
+  );
 
 
   const handleTemplateChange = (index: number, newState: any) => {
@@ -239,7 +239,7 @@ const FormContainer = ({ data, isWorkflowBlock, onTemplateChange }) => {
             onReorder={handleReorder}
           />
           }
-          {/* {renderHeader()} */}
+          {/* {steps[currentStep]?.id === 'welcome' ? renderHeader() : renderCurrentStep()} */}
           {renderCurrentStep()}
           <p className="text-gray-600 italic text-sm mb-6">{BookingConsultationTemplate.contactInfo}</p>
           {renderFooter()}

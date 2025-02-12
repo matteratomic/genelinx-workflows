@@ -38,6 +38,16 @@ export const PaymentTemplate = {
   }
 }
 
+export const WelcomeTemplate = {
+  title: "Let's prepare you for your GeneLinx Genetic Consultation",
+  subtitle: "This form includes questions about your health, your family members' health and any genetic testing you might have previously had. So please do have as much of this information as possible on hand before starting to fill out the form. The more specific information we have, the better our genetic experts can prepare for your session. You will need about 10-15 minutes to complete this form.",
+  notes: [
+    "The 2 form can be saved and completed in multiple sittings. If you choose to save the form, a link will be emailed to you which can later be used to access the form and resume where you left off.",
+    "You can also review and edit your responses before submission."
+  ],
+  questions: []
+}
+
 export const PatientDetailsTemplate = {
   title: "Patient Details",
   subtitle: "Please enter your personal and medical information.",
@@ -686,6 +696,11 @@ export const BookingConsultationTemplate = {
   ],
   contactInfo: "If you have any questions please do not hesitate to contact us at appointments@gene-linx.com with your last name and booking ID.",
   steps: [
+    {
+      id: "welcome",
+      title: "Welcome",
+      template: WelcomeTemplate
+    },
     {
       id: "patient_details",
       title: "Patient Details",

@@ -414,13 +414,14 @@ const ConsentForm = ({ data, onTemplateChange, }) => {
     <div className="w-full max-w-4xl space-y-4">
       <div className="flex justify-between">
         <div className="flex space-x-2">
-          <Button
-            variant={isEditing ? "outline" : "default"}
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            <Settings2 className="w-4 h-4 mr-2" />
-            {isEditing ? 'Editing Mode' : 'Edit Template'}
-          </Button>
+          {isEditing ?
+            <Button
+              variant={isEditing ? "outline" : "default"}
+              onClick={() => setIsEditing(!isEditing)}>
+              <Settings2 className="w-4 h-4 mr-2" />
+              {isEditing ? 'Editing Mode' : 'Edit Template'}
+            </Button>
+            : null}
           {isEditing && (
             <>
               <Button onClick={handleSave} variant="default">
