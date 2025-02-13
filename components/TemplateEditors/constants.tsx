@@ -6,7 +6,13 @@ export const OTPTemplate = {
   description: "We'd like to confirm your email address before proceeding further",
   emailLabel: 'Email',
   buttonText: 'Send OTP',
-  placeholderText: 'Enter your email'
+  placeholderText: 'Enter your email',
+  otpTitle: 'Enter Verification Code',
+  otpDescription: 'Please enter the verification code sent to your email',
+  otpLabel: 'One-Time Password',
+  otpPlaceholder: 'Enter OTP',
+  otpButtonText: 'Verify OTP'
+
 }
 
 export const PaymentTemplate = {
@@ -42,7 +48,7 @@ export const WelcomeTemplate = {
   title: "Let's prepare you for your GeneLinx Genetic Consultation",
   subtitle: "This form includes questions about your health, your family members' health and any genetic testing you might have previously had. So please do have as much of this information as possible on hand before starting to fill out the form. The more specific information we have, the better our genetic experts can prepare for your session. You will need about 10-15 minutes to complete this form.",
   notes: [
-    "The 2 form can be saved and completed in multiple sittings. If you choose to save the form, a link will be emailed to you which can later be used to access the form and resume where you left off.",
+    "The form can be saved and completed in multiple sittings. If you choose to save the form, a link will be emailed to you which can later be used to access the form and resume where you left off.",
     "You can also review and edit your responses before submission."
   ],
   questions: []
