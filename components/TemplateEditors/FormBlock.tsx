@@ -404,13 +404,15 @@ const FormBlock = ({
                   />
                 </div>
 
-                <div>
-                  <Label>Note</Label>
-                  <Input
-                    value={template.notes[0]}
-                    onChange={(e) => updateTemplate('notes', e.target.value)}
-                  />
-                </div>
+                {editingTemplate?.notes?.length ?
+                  <div>
+                    <Label>Note</Label>
+                    <Input
+                      value={template.notes[0]}
+                      onChange={(e) => updateTemplate('notes', e.target.value)}
+                    />
+                  </div>
+                  : null}
               </>
 
               {editingTemplate.questions.map((question, index) => (
