@@ -77,6 +77,8 @@ const SuccessTemplateEditor = ({ data, onTemplateChange, isWorkflowBlock }) => {
     const newSlides = [...template.slides];
     newSlides[index] = { ...newSlides[index], ...updates };
     setTemplate({ ...template, slides: newSlides });
+    onTemplateChange({ ...template, slides: newSlides });
+
   };
 
   const addSlide = () => {
@@ -131,29 +133,28 @@ const SuccessTemplateEditor = ({ data, onTemplateChange, isWorkflowBlock }) => {
     switch (slide.type) {
       case 'success':
         return (
-          <Card className="h-72 w-full max-w-md mx-auto mt-24">
+          <Card className="h-72 w-2/3 mx-auto mt-24">
             <CardHeader className="flex justify-center py-6">
-              {slide.showIcon && (
-                <div
-                  className="mx-auto p-3 w-16 h-16 flex items-center justify-center rounded-full"
-                  style={{ backgroundColor: slide.iconColor || '#4CAF50' }}
-                >
-                  <CheckCircle size={32} color="white" />
-                </div>
-              )}
+              {/* {slide.showIcon && ( */}
+              <div
+                className="mx-auto p-3 w-16 h-16 flex items-center justify-center rounded-full"
+                style={{ backgroundColor: slide.iconColor || '#035450' }}>
+                <CheckCircle size={32} color="white" />
+              </div>
+              {/* )} */}
             </CardHeader>
             <CardContent className="text-center">
               <CardTitle className="text-2xl font-medium">{slide.title}</CardTitle>
-              <p className="mt-4">{slide.description}</p>
+              <p className="mt-4 w-2/3 mx-auto">{slide.description}</p>
             </CardContent>
           </Card>
         );
 
       case 'pdf':
         return (
-          <div className="w-full h-[600px]">
+          <div className="h-[600px] w-[800px]">
             <embed
-              src={`${slide.pdfUrl}${slide.showToolbar ? '' : '#toolbar=0&navpanes=0&scrollbar=0'}`}
+              src={`${slide.pdfUrl}${slide.showToolbar ? '' : '#toolbar=0&navpanes=0&scrollbar=0&zoom=100'}`}
               width="100%"
               height="100%"
               type="application/pdf"
