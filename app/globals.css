@@ -29,7 +29,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -55,7 +55,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 @layer base {
@@ -65,4 +65,49 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.editor h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #222;
+}
+
+.editor h2 {
+  font-size: 1.75em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #333;
+}
+
+.editor h3 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #444;
+}
+
+.editor a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.editor a:hover {
+  text-decoration: underline;
+}
+
+.editor ul {
+  padding-left: 1.5em;
+  list-style-type: disc;
+}
+
+.editor ol {
+  padding-left: 1.5em;
+  list-style-type: decimal;
+}
+
+.editor ul li,
+.editor ol li {
+  margin-bottom: 0.3em;
 }

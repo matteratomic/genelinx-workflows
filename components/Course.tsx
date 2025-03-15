@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Settings2, Save, Undo, Plus, Trash2 } from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { CourseBlockTemplate } from './TemplateEditors/constants';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Settings2, Save, Undo, Plus, Trash2 } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { CourseBlockTemplate } from "./TemplateEditors/constants";
 
 const CourseBlock = ({
   data,
@@ -110,11 +110,13 @@ const CourseBlock = ({
   const progress = {
     fundamentals: 0,
     questions: 60,
-    proceed: 80
+    proceed: 80,
   };
 
   return (
-    <div className={`w-full min-h-screen bg-background ${isWorkflowBlock && "-mt-8"}`}>
+    <div
+      className={`w-full min-h-screen bg-background ${isWorkflowBlock && "-mt-8"}`}
+    >
       {!isWorkflowBlock && (
         <div className="flex space-x-2 mb-4">
           <Button
@@ -122,7 +124,7 @@ const CourseBlock = ({
             onClick={() => setIsEditing(!isEditing)}
           >
             <Settings2 className="w-4 h-4 mr-2" />
-            {isEditing ? 'Editing Mode' : 'Edit Template'}
+            {isEditing ? "Editing Mode" : "Edit Template"}
           </Button>
           {isEditing && (
             <>
@@ -151,14 +153,14 @@ const CourseBlock = ({
               <Label>Course Title</Label>
               <Input
                 value={template.title}
-                onChange={e => updateTemplate('title', e.target.value)}
+                onChange={(e) => updateTemplate("title", e.target.value)}
               />
             </div>
             <div>
               <Label>Subtitle</Label>
               <Input
                 value={template.subtitle}
-                onChange={e => updateTemplate('subtitle', e.target.value)}
+                onChange={(e) => updateTemplate("subtitle", e.target.value)}
               />
             </div>
           </TabsContent>
@@ -175,10 +177,13 @@ const CourseBlock = ({
                       title: "New Section",
                       description: "Section description",
                       topics: [],
-                      videoUrl: ""
-                    }
+                      videoUrl: "",
+                    },
                   };
-                  updateTemplate('sections', [...template.sections, newSection]);
+                  updateTemplate("sections", [
+                    ...template.sections,
+                    newSection,
+                  ]);
                 }}
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -197,9 +202,9 @@ const CourseBlock = ({
                           const newSections = [...template.sections];
                           newSections[index] = {
                             ...newSections[index],
-                            title: e.target.value
+                            title: e.target.value,
                           };
-                          updateTemplate('sections', newSections);
+                          updateTemplate("sections", newSections);
                         }}
                       />
                     </div>
@@ -208,8 +213,10 @@ const CourseBlock = ({
                         variant="destructive"
                         size="icon"
                         onClick={() => {
-                          const newSections = template.sections.filter((_, i) => i !== index);
-                          updateTemplate('sections', newSections);
+                          const newSections = template.sections.filter(
+                            (_, i) => i !== index,
+                          );
+                          updateTemplate("sections", newSections);
                         }}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -221,7 +228,14 @@ const CourseBlock = ({
                     <Label>Section Type</Label>
                     <select
                       className="w-full p-2 border rounded-md"
-                      value={section.type || (section.content ? "content" : section.questions ? "questions" : "proceed")}
+                      value={
+                        section.type ||
+                        (section.content
+                          ? "content"
+                          : section.questions
+                            ? "questions"
+                            : "proceed")
+                      }
                       onChange={(e) => {
                         const newSections = [...template.sections];
                         const type = e.target.value;
@@ -234,11 +248,11 @@ const CourseBlock = ({
                               title: "New Content Section",
                               description: "",
                               topics: [],
-                              videoUrl: ""
+                              videoUrl: "",
                             },
                             questions: undefined,
                             question: undefined,
-                            options: undefined
+                            options: undefined,
                           };
                         } else if (type === "questions") {
                           newSections[index] = {
@@ -247,7 +261,7 @@ const CourseBlock = ({
                             questions: [],
                             content: undefined,
                             question: undefined,
-                            options: undefined
+                            options: undefined,
                           };
                         } else if (type === "proceed") {
                           newSections[index] = {
@@ -256,11 +270,11 @@ const CourseBlock = ({
                             question: "Would you like to proceed?",
                             options: ["Yes", "No"],
                             content: undefined,
-                            questions: undefined
+                            questions: undefined,
                           };
                         }
 
-                        updateTemplate('sections', newSections);
+                        updateTemplate("sections", newSections);
                       }}
                     >
                       <option value="content">Content Section</option>
@@ -281,10 +295,10 @@ const CourseBlock = ({
                               ...newSections[index],
                               content: {
                                 ...newSections[index].content,
-                                title: e.target.value
-                              }
+                                title: e.target.value,
+                              },
                             };
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         />
                       </div>
@@ -299,24 +313,25 @@ const CourseBlock = ({
                               ...newSections[index],
                               content: {
                                 ...newSections[index].content,
-                                description: e.target.value
-                              }
+                                description: e.target.value,
+                              },
                             };
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         />
                       </div>
 
                       <div>
-                        <Label>Topics</Label>
+                        <Label className="mr-8">Topics</Label>
                         {section.content.topics.map((topic, topicIndex) => (
                           <div key={topicIndex} className="flex gap-2 mt-2">
                             <Input
                               value={topic}
                               onChange={(e) => {
                                 const newSections = [...template.sections];
-                                newSections[index].content.topics[topicIndex] = e.target.value;
-                                updateTemplate('sections', newSections);
+                                newSections[index].content.topics[topicIndex] =
+                                  e.target.value;
+                                updateTemplate("sections", newSections);
                               }}
                             />
                             <Button
@@ -324,10 +339,12 @@ const CourseBlock = ({
                               size="icon"
                               onClick={() => {
                                 const newSections = [...template.sections];
-                                newSections[index].content.topics = newSections[index].content.topics.filter(
-                                  (_, i) => i !== topicIndex
+                                newSections[index].content.topics = newSections[
+                                  index
+                                ].content.topics.filter(
+                                  (_, i) => i !== topicIndex,
                                 );
-                                updateTemplate('sections', newSections);
+                                updateTemplate("sections", newSections);
                               }}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -340,7 +357,7 @@ const CourseBlock = ({
                           onClick={() => {
                             const newSections = [...template.sections];
                             newSections[index].content.topics.push("New Topic");
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -358,10 +375,10 @@ const CourseBlock = ({
                               ...newSections[index],
                               content: {
                                 ...newSections[index].content,
-                                videoUrl: e.target.value
-                              }
+                                videoUrl: e.target.value,
+                              },
                             };
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         />
                       </div>
@@ -380,8 +397,10 @@ const CourseBlock = ({
                                   value={question.text}
                                   onChange={(e) => {
                                     const newSections = [...template.sections];
-                                    newSections[index].questions[questionIndex].text = e.target.value;
-                                    updateTemplate('sections', newSections);
+                                    newSections[index].questions[
+                                      questionIndex
+                                    ].text = e.target.value;
+                                    updateTemplate("sections", newSections);
                                   }}
                                 />
                               </div>
@@ -391,10 +410,12 @@ const CourseBlock = ({
                                 className="ml-2"
                                 onClick={() => {
                                   const newSections = [...template.sections];
-                                  newSections[index].questions = newSections[index].questions.filter(
-                                    (_, i) => i !== questionIndex
+                                  newSections[index].questions = newSections[
+                                    index
+                                  ].questions.filter(
+                                    (_, i) => i !== questionIndex,
                                   );
-                                  updateTemplate('sections', newSections);
+                                  updateTemplate("sections", newSections);
                                 }}
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -404,24 +425,35 @@ const CourseBlock = ({
                             <div>
                               <Label>Options</Label>
                               {question.options.map((option, optionIndex) => (
-                                <div key={optionIndex} className="flex gap-2 mt-2">
+                                <div
+                                  key={optionIndex}
+                                  className="flex gap-2 mt-2"
+                                >
                                   <Input
                                     value={option}
                                     onChange={(e) => {
-                                      const newSections = [...template.sections];
-                                      newSections[index].questions[questionIndex].options[optionIndex] = e.target.value;
-                                      updateTemplate('sections', newSections);
+                                      const newSections = [
+                                        ...template.sections,
+                                      ];
+                                      newSections[index].questions[
+                                        questionIndex
+                                      ].options[optionIndex] = e.target.value;
+                                      updateTemplate("sections", newSections);
                                     }}
                                   />
                                   <Button
                                     variant="destructive"
                                     size="icon"
                                     onClick={() => {
-                                      const newSections = [...template.sections];
-                                      newSections[index].questions[questionIndex].options = question.options.filter(
-                                        (_, i) => i !== optionIndex
+                                      const newSections = [
+                                        ...template.sections,
+                                      ];
+                                      newSections[index].questions[
+                                        questionIndex
+                                      ].options = question.options.filter(
+                                        (_, i) => i !== optionIndex,
                                       );
-                                      updateTemplate('sections', newSections);
+                                      updateTemplate("sections", newSections);
                                     }}
                                   >
                                     <Trash2 className="h-4 w-4" />
@@ -433,8 +465,10 @@ const CourseBlock = ({
                                 className="mt-2"
                                 onClick={() => {
                                   const newSections = [...template.sections];
-                                  newSections[index].questions[questionIndex].options.push("New Option");
-                                  updateTemplate('sections', newSections);
+                                  newSections[index].questions[
+                                    questionIndex
+                                  ].options.push("New Option");
+                                  updateTemplate("sections", newSections);
                                 }}
                               >
                                 <Plus className="w-4 h-4 mr-2" />
@@ -450,9 +484,9 @@ const CourseBlock = ({
                           const newSections = [...template.sections];
                           newSections[index].questions.push({
                             text: "New Question",
-                            options: ["Option 1", "Option 2"]
+                            options: ["Option 1", "Option 2"],
                           });
-                          updateTemplate('sections', newSections);
+                          updateTemplate("sections", newSections);
                         }}
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -470,7 +504,7 @@ const CourseBlock = ({
                           onChange={(e) => {
                             const newSections = [...template.sections];
                             newSections[index].question = e.target.value;
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         />
                       </div>
@@ -483,8 +517,9 @@ const CourseBlock = ({
                               value={option}
                               onChange={(e) => {
                                 const newSections = [...template.sections];
-                                newSections[index].options[optionIndex] = e.target.value;
-                                updateTemplate('sections', newSections);
+                                newSections[index].options[optionIndex] =
+                                  e.target.value;
+                                updateTemplate("sections", newSections);
                               }}
                             />
                             <Button
@@ -492,10 +527,11 @@ const CourseBlock = ({
                               size="icon"
                               onClick={() => {
                                 const newSections = [...template.sections];
-                                newSections[index].options = section.options.filter(
-                                  (_, i) => i !== optionIndex
-                                );
-                                updateTemplate('sections', newSections);
+                                newSections[index].options =
+                                  section.options.filter(
+                                    (_, i) => i !== optionIndex,
+                                  );
+                                updateTemplate("sections", newSections);
                               }}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -508,7 +544,7 @@ const CourseBlock = ({
                           onClick={() => {
                             const newSections = [...template.sections];
                             newSections[index].options.push("New Option");
-                            updateTemplate('sections', newSections);
+                            updateTemplate("sections", newSections);
                           }}
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -547,7 +583,9 @@ const CourseBlock = ({
                 {template.sections.map((section) => (
                   <Button
                     key={section.id}
-                    variant={currentSection === section.id ? "default" : "outline"}
+                    variant={
+                      currentSection === section.id ? "default" : "outline"
+                    }
                     onClick={() => setCurrentSection(section.id)}
                   >
                     {section.title}
@@ -565,18 +603,25 @@ const CourseBlock = ({
                 {section.questions && <QuestionsSection section={section} />}
                 {section.question && (
                   <div className="space-y-2 pl-4">
-                    <Label className="text-primary text-lg">{section.question}</Label>
+                    <Label className="text-primary text-lg">
+                      {section.question}
+                    </Label>
                     <div className="pt-2">
                       <RadioGroup>
                         {section.options.map((option) => (
-                          <div key={option} className="flex items-center space-x-2">
+                          <div
+                            key={option}
+                            className="flex items-center space-x-2"
+                          >
                             <RadioGroupItem value={option} id={option} />
                             <Label htmlFor={option}>{option}</Label>
                           </div>
                         ))}
                       </RadioGroup>
                     </div>
-                    <Button className="mt-8" size="lg">Submit</Button>
+                    <Button className="mt-8" size="lg">
+                      Submit
+                    </Button>
                   </div>
                 )}
               </div>
