@@ -446,13 +446,16 @@ const LandingPageEditor = ({
             <h1 className="text-primary font-bold text-4xl">
               {template.information.title}
             </h1>
-            {template.information.content.map((paragraph, index) => (
-              <div
-                key={index}
-                className="text-lg"
-                dangerouslySetInnerHTML={{ __html: paragraph }}
-              />
-            ))}
+            <div className="editor">
+              {template.information.content.map((paragraph, index) => (
+                <div
+                  key={index}
+                  className="text-lg"
+                  dangerouslySetInnerHTML={{ __html: paragraph }}
+                />
+              ))}
+            </div>
+
             <div className="mx-auto flex items-center justify-center space-x-6">
               <a href={template.information.buttons.primary.link}>
                 <div className="cursor-pointer bg-primary flex items-center justify-center p-3 rounded-md text-white w-48 font-medium">
